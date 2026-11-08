@@ -17,19 +17,13 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com) — Co
 
 - WordPress 5.8+
 - PHP 7.4+
-- Outbound HTTPS to `https://apogeewatcher.com` (or a staging API base)
+- Outbound HTTPS to `https://apogeewatcher.com` only (API base is fixed in the plugin)
 
 ## Install (development)
 
 1. Clone into `wp-content/plugins/apogee-wp-watcher`
 2. Activate in Plugins
 3. **Watcher → Connection → Connect to Watcher**
-
-API base defaults to production. Optional override in `wp-config.php`:
-
-```php
-define( 'APOGEE_WATCHER_API_BASE', 'https://apogeewatcher.com' );
-```
 
 ## Watcher API
 

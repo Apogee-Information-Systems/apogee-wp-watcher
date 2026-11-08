@@ -25,11 +25,9 @@ define( 'APOGEE_WP_WATCHER_URL', plugin_dir_url( __FILE__ ) );
 define( 'APOGEE_WP_WATCHER_BASENAME', plugin_basename( __FILE__ ) );
 
 /**
- * Default Watcher API origin (no trailing slash).
+ * Fixed production API origin (no trailing slash). Not overridable via wp-config.
  */
-if ( ! defined( 'APOGEE_WATCHER_API_BASE' ) ) {
-	define( 'APOGEE_WATCHER_API_BASE', 'https://apogeewatcher.com' );
-}
+define( 'APOGEE_WP_WATCHER_API_BASE', 'https://apogeewatcher.com' );
 
 require_once APOGEE_WP_WATCHER_PATH . 'includes/class-apogee-watcher-autoloader.php';
 Apogee_Watcher_Autoloader::register();

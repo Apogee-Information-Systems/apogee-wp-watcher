@@ -15,21 +15,20 @@ class Apogee_Watcher_Connection {
 	public const OPTION_KEY = 'apogee_wp_watcher_settings';
 
 	/**
-	 * Default option shape.
+	 * Default option shape (tokens only — API base is fixed in code).
 	 *
 	 * @return array<string, mixed>
 	 */
 	public static function defaults(): array {
 		return array(
-			'access_token'    => '',
-			'refresh_token'   => '',
-			'token_expires_at'=> 0,
-			'site_id'         => '',
-			'integration_id'  => '',
-			'site_host'       => '',
-			'scopes'          => array(),
-			'connected_at'    => '',
-			'api_base'        => APOGEE_WATCHER_API_BASE,
+			'access_token'     => '',
+			'refresh_token'    => '',
+			'token_expires_at' => 0,
+			'site_id'          => '',
+			'integration_id'   => '',
+			'site_host'        => '',
+			'scopes'           => array(),
+			'connected_at'     => '',
 		);
 	}
 
@@ -43,6 +42,8 @@ class Apogee_Watcher_Connection {
 		if ( ! is_array( $stored ) ) {
 			$stored = array();
 		}
+		// Drop legacy api_base if present from older builds.
+		unset( $stored['api_base'] );
 		return array_merge( self::defaults(), $stored );
 	}
 
@@ -52,7 +53,9 @@ class Apogee_Watcher_Connection {
 	 * @param array<string, mixed> $patch Fields to update.
 	 */
 	public function update( array $patch ): void {
+		unset( $patch['api_base'] );
 		$next = array_merge( $this->all(), $patch );
+		unset( $next['api_base'] );
 		update_option( self::OPTION_KEY, $next, false );
 	}
 
@@ -60,17 +63,7 @@ class Apogee_Watcher_Connection {
 	 * Clear tokens and site binding.
 	 */
 	public function disconnect(): void {
-		$base = $this->get( 'api_base' );
-		update_option(
-			self::OPTION_KEY,
-			array_merge(
-				self::defaults(),
-				array(
-					'api_base' => is_string( $base ) && $base !== '' ? $base : APOGEE_WATCHER_API_BASE,
-				)
-			),
-			false
-		);
+		update_option( self::OPTION_KEY, self::defaults(), false );
 		delete_transient( 'apogee_wp_watcher_overview' );
 		delete_transient( 'apogee_wp_watcher_alerts' );
 		delete_transient( 'apogee_wp_watcher_pages' );
@@ -99,12 +92,10 @@ class Apogee_Watcher_Connection {
 	}
 
 	/**
-	 * API origin without trailing slash.
+	 * Production Watcher API origin (no trailing slash).
 	 */
 	public function api_base(): string {
-		$base = (string) $this->get( 'api_base', APOGEE_WATCHER_API_BASE );
-		$base = untrailingslashit( trim( $base ) );
-		return $base !== '' ? $base : APOGEE_WATCHER_API_BASE;
+		return APOGEE_WP_WATCHER_API_BASE;
 	}
 
 	/**
@@ -114,10 +105,14 @@ class Apogee_Watcher_Connection {
 	 */
 	public function store_tokens( array $token_payload ): void {
 		$expires_in = isset( $token_payload['expires_in'] ) ? (int) $token_payload['expires_in'] : 3600;
+		$refresh    = array_key_exists( 'refresh_token', $token_payload )
+			? (string) $token_payload['refresh_token']
+			: (string) $this->get( 'refresh_token', '' );
+
 		$this->update(
 			array(
 				'access_token'     => (string) ( $token_payload['access_token'] ?? '' ),
-				'refresh_token'    => (string) ( $token_payload['refresh_token'] ?? '' ),
+				'refresh_token'    => $refresh,
 				'token_expires_at' => time() + max( 60, $expires_in ) - 30,
 				'site_id'          => (string) ( $token_payload['site_id'] ?? $this->get( 'site_id', '' ) ),
 				'integration_id'   => (string) ( $token_payload['integration_id'] ?? $this->get( 'integration_id', '' ) ),
