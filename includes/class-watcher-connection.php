@@ -99,6 +99,43 @@ class Apogee_Watcher_Connection {
 	}
 
 	/**
+	 * Allow only https URLs on the fixed Watcher host (for OAuth verification links).
+	 *
+	 * @param string $uri Candidate URL from the device-code response.
+	 * @return string Sanitised URL, or empty string if rejected.
+	 */
+	public function sanitise_verification_uri( string $uri ): string {
+		$uri = trim( $uri );
+		if ( $uri === '' ) {
+			return '';
+		}
+
+		$parts = wp_parse_url( $uri );
+		$base  = wp_parse_url( $this->api_base() );
+		if ( ! is_array( $parts ) || ! is_array( $base ) ) {
+			return '';
+		}
+
+		$host      = strtolower( (string) ( $parts['host'] ?? '' ) );
+		$base_host = strtolower( (string) ( $base['host'] ?? '' ) );
+		if ( $host === '' || $base_host === '' || $host !== $base_host ) {
+			return '';
+		}
+		if ( ( $parts['scheme'] ?? '' ) !== 'https' ) {
+			return '';
+		}
+		if ( isset( $parts['user'] ) || isset( $parts['pass'] ) ) {
+			return '';
+		}
+
+		$path     = isset( $parts['path'] ) && $parts['path'] !== '' ? (string) $parts['path'] : '/';
+		$query    = isset( $parts['query'] ) ? '?' . (string) $parts['query'] : '';
+		$fragment = isset( $parts['fragment'] ) ? '#' . (string) $parts['fragment'] : '';
+
+		return 'https://' . $base_host . $path . $query . $fragment;
+	}
+
+	/**
 	 * Store tokens from OAuth token response.
 	 *
 	 * @param array<string, mixed> $token_payload Token endpoint JSON.

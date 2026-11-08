@@ -41,6 +41,29 @@
 		});
 	}
 
+	function allowedVerificationUrl(url) {
+		if (!url || typeof url !== 'string') {
+			return '';
+		}
+		var base = apogeeWpWatcher.apiBase || 'https://apogeewatcher.com';
+		try {
+			var parsed = new URL(url);
+			var allowed = new URL(base);
+			if (parsed.protocol !== 'https:') {
+				return '';
+			}
+			if (parsed.username || parsed.password) {
+				return '';
+			}
+			if (parsed.hostname.toLowerCase() !== allowed.hostname.toLowerCase()) {
+				return '';
+			}
+			return parsed.href;
+		} catch (e) {
+			return '';
+		}
+	}
+
 	function stopPoll() {
 		if (pollTimer) {
 			clearTimeout(pollTimer);
@@ -108,8 +131,18 @@
 					userCodeEl.textContent = d.user_code || '';
 				}
 				if (verifyLink) {
-					verifyLink.href = d.verification_uri_complete || d.verification_uri || '#';
-					window.open(verifyLink.href, '_blank', 'noopener');
+					var openUrl = allowedVerificationUrl(d.verification_uri_complete) ||
+						allowedVerificationUrl(d.verification_uri);
+					if (!openUrl) {
+						setFlash(apogeeWpWatcher.i18n.error, false);
+						stopPoll();
+						if (pairing) {
+							pairing.hidden = true;
+						}
+						return;
+					}
+					verifyLink.href = openUrl;
+					window.open(openUrl, '_blank', 'noopener');
 				}
 				setFlash('', true);
 				schedulePoll(d.interval || 5);

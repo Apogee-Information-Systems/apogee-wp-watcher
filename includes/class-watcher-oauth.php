@@ -60,6 +60,15 @@ class Apogee_Watcher_OAuth {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
 		}
 
+		$verify          = $this->connection->sanitise_verification_uri( (string) ( $result['verification_uri'] ?? '' ) );
+		$verify_complete = $this->connection->sanitise_verification_uri( (string) ( $result['verification_uri_complete'] ?? '' ) );
+		if ( $verify === '' && $verify_complete === '' ) {
+			wp_send_json_error(
+				array( 'message' => __( 'Watcher returned an invalid verification URL.', 'apogee-wp-watcher' ) ),
+				400
+			);
+		}
+
 		set_transient(
 			self::TRANSIENT_PENDING,
 			array(
@@ -73,9 +82,9 @@ class Apogee_Watcher_OAuth {
 
 		wp_send_json_success(
 			array(
-				'user_code'                 => $result['user_code'] ?? '',
-				'verification_uri'          => $result['verification_uri'] ?? '',
-				'verification_uri_complete' => $result['verification_uri_complete'] ?? '',
+				'user_code'                 => (string) ( $result['user_code'] ?? '' ),
+				'verification_uri'          => $verify,
+				'verification_uri_complete' => $verify_complete,
 				'expires_in'                => (int) ( $result['expires_in'] ?? 600 ),
 				'interval'                  => (int) ( $result['interval'] ?? 5 ),
 			)

@@ -3,7 +3,7 @@
  * Plugin Name:       Apogee Watcher for WordPress
  * Plugin URI:        https://apogeewatcher.com/?utm_source=wordpress&utm_medium=plugin&utm_campaign=plugin_header
  * Description:       Connect your WordPress site to Apogee Watcher. See Core Web Vitals and Lighthouse scores in the dashboard and get notified when performance drops.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Apogee Information Systems
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'APOGEE_WP_WATCHER_VERSION', '0.1.0' );
+define( 'APOGEE_WP_WATCHER_VERSION', '0.1.1' );
 define( 'APOGEE_WP_WATCHER_FILE', __FILE__ );
 define( 'APOGEE_WP_WATCHER_PATH', plugin_dir_path( __FILE__ ) );
 define( 'APOGEE_WP_WATCHER_URL', plugin_dir_url( __FILE__ ) );

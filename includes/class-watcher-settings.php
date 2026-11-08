@@ -94,6 +94,7 @@ class Apogee_Watcher_Settings {
 				array(
 					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 					'nonce'   => wp_create_nonce( 'apogee_wp_watcher_admin' ),
+					'apiBase' => $this->connection->api_base(),
 					'i18n'    => array(
 						'connecting'   => __( 'Starting pairing…', 'apogee-wp-watcher' ),
 						'waiting'      => __( 'Waiting for approval in Watcher…', 'apogee-wp-watcher' ),
