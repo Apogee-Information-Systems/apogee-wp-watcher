@@ -98,7 +98,7 @@ class Apogee_Watcher_Admin_Notices {
 			),
 			esc_url( admin_url( 'admin.php?page=apogee-wp-watcher-results' ) ),
 			esc_html__( 'Results', 'apogee-wp-watcher' ),
-			esc_url( $this->connection->api_base() . '/admin' ),
+			esc_url( $this->connection->site_admin_url() ),
 			esc_html__( 'Investigate in Watcher', 'apogee-wp-watcher' )
 		);
 	}

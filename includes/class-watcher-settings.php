@@ -120,7 +120,7 @@ class Apogee_Watcher_Settings {
 		$site_id   = (string) $this->connection->get( 'site_id', '' );
 		$host      = (string) $this->connection->get( 'site_host', '' );
 		$api_base  = $this->connection->api_base();
-		$dashboard = $api_base . '/admin';
+		$dashboard = $this->connection->site_admin_url();
 		$signup    = $api_base . '/sign-up?utm_source=wordpress&utm_medium=plugin&utm_campaign=settings';
 		?>
 		<div class="wrap apogee-wp-watcher-wrap">

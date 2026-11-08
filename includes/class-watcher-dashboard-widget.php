@@ -148,7 +148,7 @@ class Apogee_Watcher_Dashboard_Widget {
 			'<p><a href="%s">%s</a> · <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
 			esc_url( admin_url( 'admin.php?page=apogee-wp-watcher-results' ) ),
 			esc_html__( 'Test results', 'apogee-wp-watcher' ),
-			esc_url( $this->connection->api_base() . '/admin' ),
+			esc_url( $this->connection->site_admin_url() ),
 			esc_html__( 'View in Watcher', 'apogee-wp-watcher' )
 		);
 		echo '</div>';

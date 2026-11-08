@@ -99,6 +99,17 @@ class Apogee_Watcher_Connection {
 	}
 
 	/**
+	 * Watcher admin URL for this connected site (view page), or dashboard if unbound.
+	 */
+	public function site_admin_url(): string {
+		$site_id = (string) $this->get( 'site_id', '' );
+		if ( $site_id !== '' ) {
+			return $this->api_base() . '/admin/watcher-sites/' . rawurlencode( $site_id );
+		}
+		return $this->api_base() . '/admin';
+	}
+
+	/**
 	 * Allow only https URLs on the fixed Watcher host (for OAuth verification links).
 	 *
 	 * @param string $uri Candidate URL from the device-code response.

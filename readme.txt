@@ -4,7 +4,7 @@ Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,7 +53,7 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Changelog ==
 
-= 0.1.1 =
+= 0.1.2 =
 * Lock API base to production; allowlist OAuth verification URLs before opening them in the admin.
 
 = 0.1.0 =
@@ -61,7 +61,7 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Upgrade Notice ==
 
-= 0.1.1 =
+= 0.1.2 =
 Security hardening for the Connect flow.
 
 = 0.1.0 =

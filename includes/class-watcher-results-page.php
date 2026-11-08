@@ -94,7 +94,7 @@ class Apogee_Watcher_Results_Page {
 			echo '<p>' . esc_html__( 'No monitored pages yet. Add pages in the Watcher dashboard, then return here.', 'apogee-wp-watcher' ) . '</p>';
 			printf(
 				'<p><a class="button" href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
-				esc_url( $this->connection->api_base() . '/admin' ),
+				esc_url( $this->connection->site_admin_url() ),
 				esc_html__( 'Open Watcher', 'apogee-wp-watcher' )
 			);
 			echo '</div>';
