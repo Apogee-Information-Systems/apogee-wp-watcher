@@ -25,10 +25,10 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com) — Co
 2. Activate in Plugins
 3. **Watcher → Connection → Connect to Watcher**
 
-Optional constant in `wp-config.php` for staging:
+API base defaults to production. Optional override in `wp-config.php`:
 
 ```php
-define( 'APOGEE_WATCHER_API_BASE', 'https://dev1.apogeewatcher.com' );
+define( 'APOGEE_WATCHER_API_BASE', 'https://apogeewatcher.com' );
 ```
 
 ## Watcher API
