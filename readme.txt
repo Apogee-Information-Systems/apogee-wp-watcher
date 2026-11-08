@@ -54,6 +54,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 == Changelog ==
 
 = 0.1.2 =
+* Open Watcher links go to the connected site view (`/admin/watcher-sites/{id}`).
+
+= 0.1.1 =
 * Lock API base to production; allowlist OAuth verification URLs before opening them in the admin.
 
 = 0.1.0 =
@@ -62,6 +65,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 == Upgrade Notice ==
 
 = 0.1.2 =
+Open Watcher opens the linked site.
+
+= 0.1.1 =
 Security hardening for the Connect flow.
 
 = 0.1.0 =
