@@ -102,6 +102,27 @@
 	word-break: break-all;
 }
 
+.apogee-wp-watcher-page-cell a {
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.apogee-wp-watcher-page-cell a:hover,
+.apogee-wp-watcher-page-cell a:focus {
+	text-decoration: underline;
+	color: #ff6633;
+}
+
+.apogee-wp-watcher-table td a {
+	text-decoration: none;
+}
+
+.apogee-wp-watcher-table td a:hover,
+.apogee-wp-watcher-table td a:focus {
+	text-decoration: underline;
+	color: #ff6633;
+}
+
 .apogee-wp-watcher-pairing[hidden] {
 	display: none !important;
 }

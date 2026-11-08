@@ -4,7 +4,7 @@ Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Connect your WordPress site to Apogee Watcher. See Core Web Vitals and Lighthous
 **What you get with the free plugin:**
 
 * **Dashboard widget** — Latest Lighthouse performance score and Core Web Vitals (LCP, INP, CLS) at a glance, with a link to view full history in Watcher.
-* **Test results in WordPress** — View recent page scores inside the WordPress admin.
+* **Test results in WordPress** — View recent page scores inside the WordPress admin, with page titles linking into Watcher and timestamps linking to the matching test result.
 * **One-click connection** — Connect this site to Watcher with a secure device pairing flow (create a free Watcher account or sign in). No Google PageSpeed API key in WordPress.
 * **Admin notifications** — When Watcher has open performance alerts, you see a notice in the admin with a link to investigate.
 
@@ -53,6 +53,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Changelog ==
 
+= 0.1.3 =
+* Test results table shows page titles (link to the page in Watcher) and last-tested timestamps (link to the result).
+
 = 0.1.2 =
 * Open Watcher links go to the connected site view (`/admin/watcher-sites/{id}`).
 
@@ -63,6 +66,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 * Initial public release: device OAuth connect, dashboard widget, test results page, and alert notices.
 
 == Upgrade Notice ==
+
+= 0.1.3 =
+Test results now include page titles and tested timestamps with Watcher deep links.
 
 = 0.1.2 =
 Open Watcher opens the linked site.

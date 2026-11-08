@@ -103,17 +103,29 @@ class Apogee_Watcher_Results_Page {
 
 		echo '<table class="widefat striped apogee-wp-watcher-table">';
 		echo '<thead><tr>';
-		foreach ( array( 'URL', 'Mobile', 'Desktop', 'LCP (m)', 'INP (m)', 'CLS (m)' ) as $h ) {
+		foreach (
+			array(
+				__( 'Page', 'apogee-wp-watcher' ),
+				__( 'Tested', 'apogee-wp-watcher' ),
+				__( 'Mobile', 'apogee-wp-watcher' ),
+				__( 'Desktop', 'apogee-wp-watcher' ),
+				__( 'LCP (m)', 'apogee-wp-watcher' ),
+				__( 'INP (m)', 'apogee-wp-watcher' ),
+				__( 'CLS (m)', 'apogee-wp-watcher' ),
+			) as $h
+		) {
 			printf( '<th>%s</th>', esc_html( $h ) );
 		}
 		echo '</tr></thead><tbody>';
 
 		foreach ( $rows as $row ) {
-			$url     = (string) ( $row['url'] ?? '' );
 			$mobile  = is_array( $row['latest']['mobile'] ?? null ) ? $row['latest']['mobile'] : null;
 			$desktop = is_array( $row['latest']['desktop'] ?? null ) ? $row['latest']['desktop'] : null;
+			$latest  = $this->pick_latest_result( $mobile, $desktop );
+
 			echo '<tr>';
-			printf( '<td><code>%s</code></td>', esc_html( $url ) );
+			echo '<td>' . $this->page_cell( $row ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside helper.
+			echo '<td>' . $this->tested_cell( $latest ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside helper.
 			printf( '<td>%s</td>', esc_html( $this->score_cell( $mobile ) ) );
 			printf( '<td>%s</td>', esc_html( $this->score_cell( $desktop ) ) );
 			printf( '<td>%s</td>', esc_html( $this->metric( $mobile, 'lcp' ) ) );
@@ -140,8 +152,159 @@ class Apogee_Watcher_Results_Page {
 			);
 		}
 
-		echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units).', 'apogee-wp-watcher' ) . '</p>';
+		echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; timestamps open that test result.', 'apogee-wp-watcher' ) . '</p>';
 		echo '</div>';
+	}
+
+	/**
+	 * Page title linking to Watcher page view, with URL as secondary text.
+	 *
+	 * @param array<string,mixed> $row Page row from API.
+	 */
+	private function page_cell( array $row ): string {
+		$title    = $this->page_title( $row );
+		$page_url = $this->page_watcher_url( $row );
+		$url      = (string) ( $row['url'] ?? '' );
+
+		$title_html = $page_url
+			? sprintf(
+				'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+				esc_url( $page_url ),
+				esc_html( $title )
+			)
+			: esc_html( $title );
+
+		$secondary = '';
+		if ( $url !== '' && $url !== $title ) {
+			$secondary = sprintf(
+				'<div class="apogee-wp-watcher-muted"><code>%s</code></div>',
+				esc_html( $url )
+			);
+		}
+
+		return '<div class="apogee-wp-watcher-page-cell">' . $title_html . $secondary . '</div>';
+	}
+
+	/**
+	 * Timestamp linking to the Watcher result view.
+	 *
+	 * @param array<string,mixed>|null $result Latest result summary.
+	 */
+	private function tested_cell( ?array $result ): string {
+		if ( ! $result || empty( $result['tested_at'] ) ) {
+			return esc_html( '—' );
+		}
+
+		$label = $this->format_tested_at( (string) $result['tested_at'] );
+		$href  = $this->result_watcher_url( $result );
+
+		if ( ! $href ) {
+			return esc_html( $label );
+		}
+
+		return sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url( $href ),
+			esc_html( $label )
+		);
+	}
+
+	/**
+	 * Prefer the more recently completed strategy result.
+	 *
+	 * @param array<string,mixed>|null $mobile  Mobile summary.
+	 * @param array<string,mixed>|null $desktop Desktop summary.
+	 * @return array<string,mixed>|null
+	 */
+	private function pick_latest_result( ?array $mobile, ?array $desktop ): ?array {
+		if ( ! $mobile ) {
+			return $desktop;
+		}
+		if ( ! $desktop ) {
+			return $mobile;
+		}
+
+		$m = strtotime( (string) ( $mobile['tested_at'] ?? '' ) ) ?: 0;
+		$d = strtotime( (string) ( $desktop['tested_at'] ?? '' ) ) ?: 0;
+
+		return $d > $m ? $desktop : $mobile;
+	}
+
+	/**
+	 * @param array<string,mixed> $row Page row.
+	 */
+	private function page_title( array $row ): string {
+		$name = isset( $row['name'] ) ? trim( (string) $row['name'] ) : '';
+		if ( $name !== '' ) {
+			return $name;
+		}
+
+		$url = (string) ( $row['url'] ?? '' );
+		if ( $url === '' ) {
+			return __( 'Untitled page', 'apogee-wp-watcher' );
+		}
+
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		if ( is_string( $path ) && $path !== '' && $path !== '/' ) {
+			$slug = trim( $path, '/' );
+			$slug = $slug !== '' ? $slug : $path;
+			return $slug;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Deep link to the page in Watcher admin.
+	 *
+	 * @param array<string,mixed> $row Page row.
+	 */
+	private function page_watcher_url( array $row ): string {
+		if ( ! empty( $row['page_url'] ) && is_string( $row['page_url'] ) ) {
+			return $row['page_url'];
+		}
+
+		$page_id = isset( $row['id'] ) ? (string) $row['id'] : '';
+		if ( $page_id === '' ) {
+			return '';
+		}
+
+		return $this->connection->api_base() . '/admin/watcher-site-pages/' . rawurlencode( $page_id );
+	}
+
+	/**
+	 * Deep link to a test result in Watcher admin.
+	 *
+	 * @param array<string,mixed> $result Result summary.
+	 */
+	private function result_watcher_url( array $result ): string {
+		if ( ! empty( $result['result_url'] ) && is_string( $result['result_url'] ) ) {
+			return $result['result_url'];
+		}
+
+		$result_id = isset( $result['id'] ) ? (string) $result['id'] : '';
+		if ( $result_id === '' ) {
+			return '';
+		}
+
+		return $this->connection->api_base() . '/admin/watcher-site-test-results/' . rawurlencode( $result_id );
+	}
+
+	/**
+	 * Format ISO timestamp for wp-admin (site timezone).
+	 *
+	 * @param string $iso ISO-8601 datetime.
+	 */
+	private function format_tested_at( string $iso ): string {
+		$ts = strtotime( $iso );
+		if ( ! $ts ) {
+			return $iso;
+		}
+
+		return wp_date(
+			sprintf( '%s %s', get_option( 'date_format' ), get_option( 'time_format' ) ),
+			$ts
+		);
 	}
 
 	/**
