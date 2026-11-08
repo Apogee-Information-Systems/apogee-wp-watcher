@@ -1,0 +1,107 @@
+/**
+ * Apogee Watcher admin (scoped — does not restyle core WP).
+ * Brand: charcoal #2e2e2e, orange #ff6633.
+ */
+
+.apogee-wp-watcher-wrap {
+	max-width: 920px;
+	color: #2e2e2e;
+}
+
+.apogee-wp-watcher-lead {
+	font-size: 14px;
+	max-width: 40rem;
+}
+
+.apogee-wp-watcher-card {
+	background: #fff;
+	border: 2px solid #2e2e2e;
+	box-shadow: 4px 4px 0 #2e2e2e;
+	padding: 1.25rem 1.5rem;
+	margin: 1.25rem 0;
+}
+
+.apogee-wp-watcher-card h2 {
+	margin-top: 0;
+	font-size: 1.1rem;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+
+.apogee-wp-watcher-status.is-connected {
+	color: #1a7a3a;
+}
+
+.apogee-wp-watcher-status.is-disconnected {
+	color: #6b6b6b;
+}
+
+.apogee-wp-watcher-muted {
+	color: #6b6b6b;
+	font-size: 12px;
+}
+
+.apogee-wp-watcher-user-code {
+	font-size: 1.25rem;
+	letter-spacing: 0.2em;
+	font-weight: 700;
+}
+
+.apogee-wp-watcher-flash {
+	min-height: 1.25em;
+}
+
+.apogee-wp-watcher-flash.is-error {
+	color: #b32d2e;
+}
+
+.apogee-wp-watcher-flash.is-ok {
+	color: #1a7a3a;
+}
+
+.apogee-wp-watcher-wrap .button-primary {
+	background: #ff6633;
+	border-color: #2e2e2e;
+	color: #2e2e2e;
+	text-shadow: none;
+	box-shadow: 2px 2px 0 #2e2e2e;
+}
+
+.apogee-wp-watcher-wrap .button-primary:hover,
+.apogee-wp-watcher-wrap .button-primary:focus {
+	background: #ff774d;
+	border-color: #2e2e2e;
+	color: #2e2e2e;
+}
+
+.apogee-wp-watcher-widget .apogee-wp-watcher-score-value {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #ff6633;
+}
+
+.apogee-wp-watcher-cwv {
+	display: flex;
+	gap: 1rem;
+	list-style: none;
+	margin: 0.5rem 0 1rem;
+	padding: 0;
+}
+
+.apogee-wp-watcher-cwv li {
+	margin: 0;
+}
+
+.apogee-wp-watcher-alert-count {
+	color: #b32d2e;
+	font-weight: 600;
+}
+
+.apogee-wp-watcher-table code {
+	font-size: 12px;
+	word-break: break-all;
+}
+
+.apogee-wp-watcher-pairing[hidden] {
+	display: none !important;
+}
