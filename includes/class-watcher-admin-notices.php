@@ -36,7 +36,7 @@ class Apogee_Watcher_Admin_Notices {
 	 */
 	public function hooks(): void {
 		add_action( 'admin_notices', array( $this, 'render' ) );
-		add_action( 'wp_ajax_apogee_wp_watcher_dismiss_alerts', array( $this, 'ajax_dismiss' ) );
+		add_action( 'wp_ajax_apogee_watcher_dismiss_alerts', array( $this, 'ajax_dismiss' ) );
 	}
 
 	/**
@@ -47,15 +47,15 @@ class Apogee_Watcher_Admin_Notices {
 			return;
 		}
 
-		if ( get_user_meta( get_current_user_id(), 'apogee_wp_watcher_alerts_dismissed', true ) === '1' ) {
+		if ( get_user_meta( get_current_user_id(), 'apogee_watcher_alerts_dismissed', true ) === '1' ) {
 			return;
 		}
 
-		$alerts = get_transient( 'apogee_wp_watcher_alerts' );
+		$alerts = get_transient( 'apogee_watcher_alerts' );
 		if ( false === $alerts ) {
 			$alerts = $this->api->get_alerts();
 			if ( ! is_wp_error( $alerts ) ) {
-				set_transient( 'apogee_wp_watcher_alerts', $alerts, 15 * MINUTE_IN_SECONDS );
+				set_transient( 'apogee_watcher_alerts', $alerts, 15 * MINUTE_IN_SECONDS );
 			}
 		}
 
@@ -70,7 +70,7 @@ class Apogee_Watcher_Admin_Notices {
 		}
 
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( $screen && false !== strpos( (string) $screen->id, 'apogee-wp-watcher' ) ) {
+		if ( $screen && false !== strpos( (string) $screen->id, 'apogee-watcher' ) ) {
 			// Still show on plugin pages — useful context.
 		}
 
@@ -79,9 +79,9 @@ class Apogee_Watcher_Admin_Notices {
 		$strategy = isset( $first['strategy'] ) ? (string) $first['strategy'] : '';
 
 		printf(
-			'<div class="notice notice-warning is-dismissible apogee-wp-watcher-notice" data-dismiss-nonce="%s"><p><strong>%s</strong> %s <a href="%s">%s</a> · <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',
-			esc_attr( wp_create_nonce( 'apogee_wp_watcher_admin' ) ),
-			esc_html__( 'Apogee Watcher:', 'apogee-wp-watcher' ),
+			'<div class="notice notice-warning is-dismissible apogee-watcher-notice" data-dismiss-nonce="%s"><p><strong>%s</strong> %s <a href="%s">%s</a> · <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',
+			esc_attr( wp_create_nonce( 'apogee_watcher_admin' ) ),
+			esc_html__( 'Apogee Watcher:', 'apogee-watcher' ),
 			esc_html(
 				sprintf(
 					/* translators: 1: alert count, 2: metric, 3: strategy */
@@ -89,17 +89,17 @@ class Apogee_Watcher_Admin_Notices {
 						'%1$d open alert (%2$s · %3$s).',
 						'%1$d open alerts (e.g. %2$s · %3$s).',
 						$count,
-						'apogee-wp-watcher'
+						'apogee-watcher'
 					),
 					$count,
 					$metric,
 					$strategy
 				)
 			),
-			esc_url( admin_url( 'admin.php?page=apogee-wp-watcher-results' ) ),
-			esc_html__( 'Results', 'apogee-wp-watcher' ),
+			esc_url( admin_url( 'admin.php?page=apogee-watcher-results' ) ),
+			esc_html__( 'Results', 'apogee-watcher' ),
 			esc_url( $this->connection->site_admin_url() ),
-			esc_html__( 'Investigate in Watcher', 'apogee-wp-watcher' )
+			esc_html__( 'Investigate in Watcher', 'apogee-watcher' )
 		);
 	}
 
@@ -110,8 +110,8 @@ class Apogee_Watcher_Admin_Notices {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( null, 403 );
 		}
-		check_ajax_referer( 'apogee_wp_watcher_admin', 'nonce' );
-		update_user_meta( get_current_user_id(), 'apogee_wp_watcher_alerts_dismissed', '1' );
+		check_ajax_referer( 'apogee_watcher_admin', 'nonce' );
+		update_user_meta( get_current_user_id(), 'apogee_watcher_alerts_dismissed', '1' );
 		wp_send_json_success();
 	}
 }

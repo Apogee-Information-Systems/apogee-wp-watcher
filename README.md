@@ -1,8 +1,8 @@
-# Apogee Watcher for WordPress
+# Apogee Watcher: Automated PageSpeed Monitoring
 
 Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core Web Vitals and Lighthouse monitoring in wp-admin, without a Google PageSpeed API key in WordPress.
 
-**Display name:** Apogee Watcher for WordPress · **Slug:** `apogee-wp-watcher` · **Version:** 0.3.0 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher)
+**Display name:** Apogee Watcher: Automated PageSpeed Monitoring · **Slug:** `apogee-watcher` · **Version:** 0.3.1 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher) (GitHub repo name unchanged)
 
 ## Features (v0.3)
 
@@ -19,7 +19,7 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core 
 
 ## Requirements
 
-- WordPress 5.8+
+- WordPress 5.8+ (tested up to 7.1.4)
 - PHP 7.4+
 - Outbound HTTPS to `https://apogeewatcher.com` only (API base is fixed in the plugin)
 
@@ -29,11 +29,21 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core 
 
 **Development:**
 
-1. Clone into `wp-content/plugins/apogee-wp-watcher`
+1. Clone into `wp-content/plugins/apogee-watcher`
 2. Activate in Plugins
 3. **Watcher → Connection → Connect to Watcher**
 
 After the first install, newer versions appear on the Plugins / Updates screens when Watcher publishes them (self-hosted update check).
+
+## Release ZIP
+
+Build a clean package (excludes `.git`, `.gitignore`, `CONTRIBUTING.md`, `bin/`, IDE junk):
+
+```bash
+./bin/build-release-zip.sh              # self-hosted (keeps Update URI)
+./bin/build-release-zip.sh --wporg      # WordPress.org candidate (strips Update URI)
+# → dist/apogee-watcher-0.3.1[.zip|-wporg.zip] + SHA256 on stdout
+```
 
 ## Watcher API
 
@@ -63,4 +73,4 @@ GPL-2.0-or-later (required for WordPress.org).
 
 ## Contributing
 
-PRs welcome. Keep PHP 7.4-compatible, escape output, capability-check admin actions, and do not phone home before the admin clicks Connect. For string changes, regenerate `languages/apogee-wp-watcher.pot` and update the locale files (see `CONTRIBUTING.md`).
+PRs welcome. Keep PHP 7.4-compatible, escape output, capability-check admin actions, and do not phone home before the admin clicks Connect. For string changes, regenerate `languages/apogee-watcher.pot` and update the locale files (see `CONTRIBUTING.md`).

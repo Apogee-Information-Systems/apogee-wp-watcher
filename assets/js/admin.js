@@ -5,13 +5,13 @@
 		return;
 	}
 
-	var flash = document.getElementById('apogee-wp-watcher-flash');
-	var pairing = document.getElementById('apogee-wp-watcher-pairing');
-	var userCodeEl = document.getElementById('apogee-wp-watcher-user-code');
-	var verifyLink = document.getElementById('apogee-wp-watcher-verify-link');
-	var pairingStatus = document.getElementById('apogee-wp-watcher-pairing-status');
-	var connectBtn = document.getElementById('apogee-wp-watcher-connect');
-	var disconnectBtn = document.getElementById('apogee-wp-watcher-disconnect');
+	var flash = document.getElementById('apogee-watcher-flash');
+	var pairing = document.getElementById('apogee-watcher-pairing');
+	var userCodeEl = document.getElementById('apogee-watcher-user-code');
+	var verifyLink = document.getElementById('apogee-watcher-verify-link');
+	var pairingStatus = document.getElementById('apogee-watcher-pairing-status');
+	var connectBtn = document.getElementById('apogee-watcher-connect');
+	var disconnectBtn = document.getElementById('apogee-watcher-disconnect');
 	var pollTimer = null;
 
 	function setFlash(message, ok) {
@@ -81,7 +81,7 @@
 		if (pairingStatus) {
 			pairingStatus.textContent = apogeeWpWatcher.i18n.waiting;
 		}
-		post('apogee_wp_watcher_poll_token').then(function (json) {
+		post('apogee_watcher_poll_token').then(function (json) {
 			if (!json) {
 				setFlash(apogeeWpWatcher.i18n.error, false);
 				schedulePoll(5);
@@ -117,7 +117,7 @@
 		connectBtn.addEventListener('click', function () {
 			setFlash(apogeeWpWatcher.i18n.connecting, true);
 			connectBtn.disabled = true;
-			post('apogee_wp_watcher_start_connect').then(function (json) {
+			post('apogee_watcher_start_connect').then(function (json) {
 				connectBtn.disabled = false;
 				if (!json || !json.success) {
 					setFlash((json && json.data && json.data.message) || apogeeWpWatcher.i18n.error, false);
@@ -160,7 +160,7 @@
 			}
 			setFlash(apogeeWpWatcher.i18n.disconnecting, true);
 			disconnectBtn.disabled = true;
-			post('apogee_wp_watcher_disconnect').then(function (json) {
+			post('apogee_watcher_disconnect').then(function (json) {
 				if (json && json.success) {
 					window.location.reload();
 					return;
@@ -174,9 +174,9 @@
 		});
 	}
 
-	var selectAll = document.getElementById('apogee-wp-watcher-tracked-select-all');
-	var bulkApply = document.getElementById('apogee-wp-watcher-bulk-apply');
-	var trackedFlash = document.getElementById('apogee-wp-watcher-tracked-flash');
+	var selectAll = document.getElementById('apogee-watcher-tracked-select-all');
+	var bulkApply = document.getElementById('apogee-watcher-bulk-apply');
+	var trackedFlash = document.getElementById('apogee-watcher-tracked-flash');
 
 	function setTrackedFlash(message, ok) {
 		if (!trackedFlash) {
@@ -189,7 +189,7 @@
 
 	if (selectAll) {
 		selectAll.addEventListener('change', function () {
-			document.querySelectorAll('.apogee-wp-watcher-tracked-cb').forEach(function (cb) {
+			document.querySelectorAll('.apogee-watcher-tracked-cb').forEach(function (cb) {
 				cb.checked = selectAll.checked;
 			});
 		});
@@ -197,10 +197,10 @@
 
 	if (bulkApply) {
 		bulkApply.addEventListener('click', function () {
-			var actionEl = document.getElementById('apogee-wp-watcher-bulk');
+			var actionEl = document.getElementById('apogee-watcher-bulk');
 			var action = actionEl ? actionEl.value : '';
 			var pages = [];
-			document.querySelectorAll('.apogee-wp-watcher-tracked-cb:checked').forEach(function (cb) {
+			document.querySelectorAll('.apogee-watcher-tracked-cb:checked').forEach(function (cb) {
 				pages.push({
 					external_id: cb.value,
 					url: cb.getAttribute('data-url') || '',
@@ -214,7 +214,7 @@
 			bulkApply.disabled = true;
 			setTrackedFlash(apogeeWpWatcher.i18n.bulkWorking || '…', true);
 			var body = new FormData();
-			body.append('action', 'apogee_wp_watcher_pages_bulk');
+			body.append('action', 'apogee_watcher_pages_bulk');
 			body.append('nonce', apogeeWpWatcher.nonce);
 			body.append('bulk_action', action);
 			body.append('pages', JSON.stringify(pages));

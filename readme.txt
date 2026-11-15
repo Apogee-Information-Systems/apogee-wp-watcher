@@ -1,18 +1,18 @@
-=== Apogee Watcher for WordPress ===
+=== Apogee Watcher: Automated PageSpeed Monitoring ===
 Contributors: apogeeinformationsystems
 Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 7.1.4
 Requires PHP: 7.4
-Stable tag: 0.3.0
-License: GPLv2 or later
+Stable tag: 0.3.1
+License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Connect your WordPress site to Apogee Watcher. See Core Web Vitals and Lighthouse scores in the dashboard and get notified when performance drops.
 
 == Description ==
 
-**Apogee Watcher for WordPress** connects your site to [Apogee Watcher](https://apogeewatcher.com), a PageSpeed and Core Web Vitals monitoring service. Once connected, you can see your latest performance scores and key metrics directly in the WordPress admin—no need to leave your site to check how it's performing.
+**Apogee Watcher: Automated PageSpeed Monitoring** connects your site to [Apogee Watcher](https://apogeewatcher.com), a PageSpeed and Core Web Vitals monitoring service. Once connected, you can see your latest performance scores and key metrics directly in the WordPress admin—no need to leave your site to check how it's performing.
 
 **What you get with the free plugin:**
 
@@ -31,7 +31,7 @@ This plugin connects to Apogee Watcher (`https://apogeewatcher.com`) operated by
 
 == Installation ==
 
-1. Upload the `apogee-wp-watcher` folder to `/wp-content/plugins/` or install via Plugins → Add New.
+1. Upload the `apogee-watcher` folder to `/wp-content/plugins/` or install via Plugins → Add New.
 2. Activate the plugin through the **Plugins** menu.
 3. Open **Watcher → Connection** and click **Connect to Watcher**.
 4. Approve the site in your Apogee Watcher account (create a free account if needed).
@@ -52,6 +52,15 @@ Yes. New users can create a Free Apogee Watcher account during Connect (subject 
 No. It is monitoring-only. Use your usual caching/optimization plugins alongside Watcher.
 
 == Changelog ==
+
+= 0.3.1 =
+* Rename plugin to Apogee Watcher: Automated PageSpeed Monitoring.
+* Plugin slug / folder / text domain: apogee-watcher (was apogee-wp-watcher); migrates connection options from the old keys.
+* GDPR: privacy exporters/erasers for Tools → Export / Erase Personal Data.
+* Clear alert-dismiss user meta on uninstall; accessibility labels on Tracked pages and pairing link.
+* Sanitize Tracked pages bulk JSON input; load textdomain only for self-hosted (Update URI) builds.
+* Distribution ZIP excludes repo files (.gitignore, CONTRIBUTING.md); optional --wporg build strips Update URI.
+* Tested up to WordPress 7.1.4; License GPL-2.0-or-later in readme.
 
 = 0.3.0 =
 * Connection screen: Tracked pages table with bulk include / pause scheduled tests.
@@ -83,6 +92,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Upgrade Notice ==
 
+= 0.3.1 =
+Slug is now apogee-watcher. Deactivate the old plugin, install this ZIP, activate (connection migrates), then delete the old apogee-wp-watcher folder.
+
 = 0.3.0 =
 Add or pause Watcher scheduled pages from the Connection screen.
 
@@ -97,15 +109,3 @@ Test results page shows recent alerts beside page scores.
 
 = 0.1.4 =
 Adds self-hosted dashboard updates from Apogee Watcher.
-
-= 0.1.3 =
-Test results now include page titles and tested timestamps with Watcher deep links.
-
-= 0.1.2 =
-Open Watcher opens the linked site.
-
-= 0.1.1 =
-Security hardening for the Connect flow.
-
-= 0.1.0 =
-First release.

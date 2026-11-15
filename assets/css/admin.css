@@ -3,16 +3,16 @@
  * Brand: charcoal #2e2e2e, orange #ff6633.
  */
 
-.apogee-wp-watcher-wrap {
+.apogee-watcher-wrap {
 	max-width: 920px;
 	color: #2e2e2e;
 }
 
-.apogee-wp-watcher-wrap--wide {
+.apogee-watcher-wrap--wide {
 	max-width: 1400px;
 }
 
-.apogee-wp-watcher-results-grid {
+.apogee-watcher-results-grid {
 	display: grid;
 	grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
 	gap: 1.5rem;
@@ -20,38 +20,38 @@
 	margin: 1.25rem 0;
 }
 
-.apogee-wp-watcher-results-heading {
+.apogee-watcher-results-heading {
 	margin: 0 0 0.75rem;
 	font-size: 1rem;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 }
 
-.apogee-wp-watcher-alerts-table {
+.apogee-watcher-alerts-table {
 	font-size: 13px;
 }
 
-.apogee-wp-watcher-alert-status.is-open {
+.apogee-watcher-alert-status.is-open {
 	color: #b32d2e;
 	font-weight: 600;
 }
 
-.apogee-wp-watcher-alert-status.is-resolved {
+.apogee-watcher-alert-status.is-resolved {
 	color: #6b6b6b;
 }
 
 @media (max-width: 1100px) {
-	.apogee-wp-watcher-results-grid {
+	.apogee-watcher-results-grid {
 		grid-template-columns: 1fr;
 	}
 }
 
-.apogee-wp-watcher-lead {
+.apogee-watcher-lead {
 	font-size: 14px;
 	max-width: 40rem;
 }
 
-.apogee-wp-watcher-card {
+.apogee-watcher-card {
 	background: #fff;
 	border: 2px solid #2e2e2e;
 	box-shadow: 4px 4px 0 #2e2e2e;
@@ -59,45 +59,45 @@
 	margin: 1.25rem 0;
 }
 
-.apogee-wp-watcher-card h2 {
+.apogee-watcher-card h2 {
 	margin-top: 0;
 	font-size: 1.1rem;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 }
 
-.apogee-wp-watcher-status.is-connected {
+.apogee-watcher-status.is-connected {
 	color: #1a7a3a;
 }
 
-.apogee-wp-watcher-status.is-disconnected {
+.apogee-watcher-status.is-disconnected {
 	color: #6b6b6b;
 }
 
-.apogee-wp-watcher-muted {
+.apogee-watcher-muted {
 	color: #6b6b6b;
 	font-size: 12px;
 }
 
-.apogee-wp-watcher-user-code {
+.apogee-watcher-user-code {
 	font-size: 1.25rem;
 	letter-spacing: 0.2em;
 	font-weight: 700;
 }
 
-.apogee-wp-watcher-flash {
+.apogee-watcher-flash {
 	min-height: 1.25em;
 }
 
-.apogee-wp-watcher-flash.is-error {
+.apogee-watcher-flash.is-error {
 	color: #b32d2e;
 }
 
-.apogee-wp-watcher-flash.is-ok {
+.apogee-watcher-flash.is-ok {
 	color: #1a7a3a;
 }
 
-.apogee-wp-watcher-wrap .button-primary {
+.apogee-watcher-wrap .button-primary {
 	background: #ff6633;
 	border-color: #2e2e2e;
 	color: #2e2e2e;
@@ -105,20 +105,20 @@
 	box-shadow: 2px 2px 0 #2e2e2e;
 }
 
-.apogee-wp-watcher-wrap .button-primary:hover,
-.apogee-wp-watcher-wrap .button-primary:focus {
+.apogee-watcher-wrap .button-primary:hover,
+.apogee-watcher-wrap .button-primary:focus {
 	background: #ff774d;
 	border-color: #2e2e2e;
 	color: #2e2e2e;
 }
 
-.apogee-wp-watcher-widget .apogee-wp-watcher-score-value {
+.apogee-watcher-widget .apogee-watcher-score-value {
 	font-size: 2rem;
 	font-weight: 700;
 	color: #ff6633;
 }
 
-.apogee-wp-watcher-cwv {
+.apogee-watcher-cwv {
 	display: flex;
 	gap: 1rem;
 	list-style: none;
@@ -126,60 +126,60 @@
 	padding: 0;
 }
 
-.apogee-wp-watcher-cwv li {
+.apogee-watcher-cwv li {
 	margin: 0;
 }
 
-.apogee-wp-watcher-alert-count {
+.apogee-watcher-alert-count {
 	color: #b32d2e;
 	font-weight: 600;
 }
 
-.apogee-wp-watcher-table code {
+.apogee-watcher-table code {
 	font-size: 12px;
 	word-break: break-all;
 }
 
-.apogee-wp-watcher-page-cell a {
+.apogee-watcher-page-cell a {
 	font-weight: 600;
 	text-decoration: none;
 }
 
-.apogee-wp-watcher-page-cell a:hover,
-.apogee-wp-watcher-page-cell a:focus {
+.apogee-watcher-page-cell a:hover,
+.apogee-watcher-page-cell a:focus {
 	text-decoration: underline;
 	color: #ff6633;
 }
 
-.apogee-wp-watcher-table td a {
+.apogee-watcher-table td a {
 	text-decoration: none;
 }
 
-.apogee-wp-watcher-table td a:hover,
-.apogee-wp-watcher-table td a:focus {
+.apogee-watcher-table td a:hover,
+.apogee-watcher-table td a:focus {
 	text-decoration: underline;
 	color: #ff6633;
 }
 
-.apogee-wp-watcher-pairing[hidden] {
+.apogee-watcher-pairing[hidden] {
 	display: none !important;
 }
 
-.apogee-wp-watcher-tracked-table .apogee-wp-watcher-url {
+.apogee-watcher-tracked-table .apogee-watcher-url {
 	font-size: 12px;
 	word-break: break-all;
 }
 
-.apogee-wp-watcher-track.is-on {
+.apogee-watcher-track.is-on {
 	color: #1a7a3a;
 	font-weight: 600;
 }
 
-.apogee-wp-watcher-track.is-paused {
+.apogee-watcher-track.is-paused {
 	color: #9a6700;
 	font-weight: 600;
 }
 
-.apogee-wp-watcher-track.is-off {
+.apogee-watcher-track.is-off {
 	color: #6b6b6b;
 }

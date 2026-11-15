@@ -20,12 +20,12 @@ class Apogee_Watcher_Updater {
 	/**
 	 * Transient for successful latest JSON.
 	 */
-	public const TRANSIENT_LATEST = 'apogee_wp_watcher_update_latest';
+	public const TRANSIENT_LATEST = 'apogee_watcher_update_latest';
 
 	/**
 	 * Transient for failed fetch (short negative cache).
 	 */
-	public const TRANSIENT_FAIL = 'apogee_wp_watcher_update_fail';
+	public const TRANSIENT_FAIL = 'apogee_watcher_update_fail';
 
 	/**
 	 * Hooks — register outside is_admin() so cron update checks work.
@@ -45,7 +45,7 @@ class Apogee_Watcher_Updater {
 	 * @return array|false
 	 */
 	public function provide_update( $update, $plugin_data, $plugin_file, $locales ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-		if ( APOGEE_WP_WATCHER_BASENAME !== $plugin_file ) {
+		if ( APOGEE_WATCHER_BASENAME !== $plugin_file ) {
 			return $update;
 		}
 
@@ -55,7 +55,7 @@ class Apogee_Watcher_Updater {
 		}
 
 		$remote_version = isset( $remote['version'] ) ? (string) $remote['version'] : '';
-		if ( $remote_version === '' || ! version_compare( $remote_version, APOGEE_WP_WATCHER_VERSION, '>' ) ) {
+		if ( $remote_version === '' || ! version_compare( $remote_version, APOGEE_WATCHER_VERSION, '>' ) ) {
 			return $update;
 		}
 
@@ -66,7 +66,7 @@ class Apogee_Watcher_Updater {
 
 		$payload = array(
 			'id'           => 'https://apogeewatcher.com/tools/wordpress',
-			'slug'         => 'apogee-wp-watcher',
+			'slug'         => 'apogee-watcher',
 			'version'      => $remote_version,
 			'url'          => ! empty( $remote['url'] ) ? (string) $remote['url'] : 'https://apogeewatcher.com/tools/wordpress',
 			'package'      => $package,
@@ -91,7 +91,7 @@ class Apogee_Watcher_Updater {
 		if ( 'plugin_information' !== $action ) {
 			return $result;
 		}
-		if ( ! is_object( $args ) || empty( $args->slug ) || 'apogee-wp-watcher' !== $args->slug ) {
+		if ( ! is_object( $args ) || empty( $args->slug ) || 'apogee-watcher' !== $args->slug ) {
 			return $result;
 		}
 
@@ -104,7 +104,7 @@ class Apogee_Watcher_Updater {
 		$sections  = array(
 			'description' => __(
 				'Connect your WordPress site to Apogee Watcher. See Core Web Vitals and Lighthouse scores in the dashboard without a Google PageSpeed API key in WordPress.',
-				'apogee-wp-watcher'
+				'apogee-watcher'
 			),
 		);
 		if ( is_string( $changelog ) && $changelog !== '' ) {
@@ -114,9 +114,9 @@ class Apogee_Watcher_Updater {
 		return (object) array(
 			'name'          => isset( $remote['name'] )
 				? (string) $remote['name']
-				: __( 'Apogee Watcher for WordPress', 'apogee-wp-watcher' ),
-			'slug'          => 'apogee-wp-watcher',
-			'version'       => isset( $remote['version'] ) ? (string) $remote['version'] : APOGEE_WP_WATCHER_VERSION,
+				: __( 'Apogee Watcher: Automated PageSpeed Monitoring', 'apogee-watcher' ),
+			'slug'          => 'apogee-watcher',
+			'version'       => isset( $remote['version'] ) ? (string) $remote['version'] : APOGEE_WATCHER_VERSION,
 			'author'        => '<a href="https://apogee.lu/">Apogee Information Systems</a>',
 			'homepage'      => ! empty( $remote['url'] ) ? (string) $remote['url'] : 'https://apogeewatcher.com/tools/wordpress',
 			'requires'      => isset( $remote['requires'] ) ? (string) $remote['requires'] : '5.8',
@@ -136,8 +136,8 @@ class Apogee_Watcher_Updater {
 	 */
 	private function normalize_icons( $icons ): array {
 		$defaults = array(
-			'1x' => APOGEE_WP_WATCHER_API_BASE . '/images/wordpress-plugin/icon-128.png',
-			'2x' => APOGEE_WP_WATCHER_API_BASE . '/images/wordpress-plugin/icon-256.png',
+			'1x' => APOGEE_WATCHER_API_BASE . '/images/wordpress-plugin/icon-128.png',
+			'2x' => APOGEE_WATCHER_API_BASE . '/images/wordpress-plugin/icon-256.png',
 		);
 
 		if ( ! is_array( $icons ) ) {
@@ -170,19 +170,19 @@ class Apogee_Watcher_Updater {
 
 		if ( get_transient( self::TRANSIENT_FAIL ) ) {
 			return new WP_Error(
-				'apogee_wp_watcher_update_fail',
-				__( 'Update check recently failed.', 'apogee-wp-watcher' )
+				'apogee_watcher_update_fail',
+				__( 'Update check recently failed.', 'apogee-watcher' )
 			);
 		}
 
-		$url      = APOGEE_WP_WATCHER_API_BASE . '/api/plugin/wordpress/latest';
+		$url      = APOGEE_WATCHER_API_BASE . '/api/plugin/wordpress/latest';
 		$response = wp_remote_get(
 			$url,
 			array(
 				'timeout' => 12,
 				'headers' => array(
 					'Accept'     => 'application/json',
-					'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WP_WATCHER_VERSION . '; ' . home_url( '/' ),
+					'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WATCHER_VERSION . '; ' . home_url( '/' ),
 				),
 			)
 		);
@@ -197,8 +197,8 @@ class Apogee_Watcher_Updater {
 		if ( $status < 200 || $status >= 300 || ! is_array( $data ) || empty( $data['version'] ) ) {
 			set_transient( self::TRANSIENT_FAIL, 1, 15 * MINUTE_IN_SECONDS );
 			return new WP_Error(
-				'apogee_wp_watcher_update_http',
-				__( 'Invalid update response.', 'apogee-wp-watcher' )
+				'apogee_watcher_update_http',
+				__( 'Invalid update response.', 'apogee-watcher' )
 			);
 		}
 
@@ -212,14 +212,14 @@ class Apogee_Watcher_Updater {
 	 * @return string|null
 	 */
 	private function fetch_changelog() {
-		$url      = APOGEE_WP_WATCHER_API_BASE . '/api/plugin/wordpress/changelog';
+		$url      = APOGEE_WATCHER_API_BASE . '/api/plugin/wordpress/changelog';
 		$response = wp_remote_get(
 			$url,
 			array(
 				'timeout' => 12,
 				'headers' => array(
 					'Accept'     => 'application/json',
-					'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WP_WATCHER_VERSION . '; ' . home_url( '/' ),
+					'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WATCHER_VERSION . '; ' . home_url( '/' ),
 				),
 			)
 		);

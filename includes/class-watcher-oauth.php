@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Apogee_Watcher_OAuth {
 
-	public const TRANSIENT_PENDING = 'apogee_wp_watcher_device_pending';
+	public const TRANSIENT_PENDING = 'apogee_watcher_device_pending';
 
 	/**
 	 * @var Apogee_Watcher_Connection
@@ -37,9 +37,9 @@ class Apogee_Watcher_OAuth {
 	 * Hooks.
 	 */
 	public function hooks(): void {
-		add_action( 'wp_ajax_apogee_wp_watcher_start_connect', array( $this, 'ajax_start_connect' ) );
-		add_action( 'wp_ajax_apogee_wp_watcher_poll_token', array( $this, 'ajax_poll_token' ) );
-		add_action( 'wp_ajax_apogee_wp_watcher_disconnect', array( $this, 'ajax_disconnect' ) );
+		add_action( 'wp_ajax_apogee_watcher_start_connect', array( $this, 'ajax_start_connect' ) );
+		add_action( 'wp_ajax_apogee_watcher_poll_token', array( $this, 'ajax_poll_token' ) );
+		add_action( 'wp_ajax_apogee_watcher_disconnect', array( $this, 'ajax_disconnect' ) );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Apogee_Watcher_OAuth {
 
 		if ( $this->connection->is_connected() ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Already connected. Disconnect first to pair again.', 'apogee-wp-watcher' ) ),
+				array( 'message' => __( 'Already connected. Disconnect first to pair again.', 'apogee-watcher' ) ),
 				400
 			);
 		}
@@ -64,7 +64,7 @@ class Apogee_Watcher_OAuth {
 		$verify_complete = $this->connection->sanitise_verification_uri( (string) ( $result['verification_uri_complete'] ?? '' ) );
 		if ( $verify === '' && $verify_complete === '' ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Watcher returned an invalid verification URL.', 'apogee-wp-watcher' ) ),
+				array( 'message' => __( 'Watcher returned an invalid verification URL.', 'apogee-watcher' ) ),
 				400
 			);
 		}
@@ -101,7 +101,7 @@ class Apogee_Watcher_OAuth {
 		if ( ! is_array( $pending ) || empty( $pending['device_code'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'No pairing in progress. Start Connect again.', 'apogee-wp-watcher' ),
+					'message' => __( 'No pairing in progress. Start Connect again.', 'apogee-watcher' ),
 					'error'   => 'expired_token',
 				),
 				400
@@ -126,7 +126,7 @@ class Apogee_Watcher_OAuth {
 				wp_send_json_success(
 					array(
 						'status'  => $oauth_error,
-						'message' => __( 'Waiting for approval in Watcher…', 'apogee-wp-watcher' ),
+						'message' => __( 'Waiting for approval in Watcher…', 'apogee-watcher' ),
 					)
 				);
 			}
@@ -141,12 +141,12 @@ class Apogee_Watcher_OAuth {
 		}
 
 		if ( empty( $result['access_token'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Unexpected token response.', 'apogee-wp-watcher' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Unexpected token response.', 'apogee-watcher' ) ), 400 );
 		}
 
 		$this->connection->store_tokens( $result );
 		delete_transient( self::TRANSIENT_PENDING );
-		delete_transient( 'apogee_wp_watcher_overview' );
+		delete_transient( 'apogee_watcher_overview' );
 
 		$integration = $this->api->get_integration();
 		if ( ! is_wp_error( $integration ) ) {
@@ -161,7 +161,7 @@ class Apogee_Watcher_OAuth {
 		wp_send_json_success(
 			array(
 				'status'  => 'connected',
-				'message' => __( 'Connected to Apogee Watcher.', 'apogee-wp-watcher' ),
+				'message' => __( 'Connected to Apogee Watcher.', 'apogee-watcher' ),
 				'site_id' => (string) $this->connection->get( 'site_id' ),
 			)
 		);
@@ -178,7 +178,7 @@ class Apogee_Watcher_OAuth {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Disconnected from Watcher.', 'apogee-wp-watcher' ),
+				'message' => __( 'Disconnected from Watcher.', 'apogee-watcher' ),
 			)
 		);
 	}
@@ -188,8 +188,8 @@ class Apogee_Watcher_OAuth {
 	 */
 	private function guard(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Forbidden.', 'apogee-wp-watcher' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Forbidden.', 'apogee-watcher' ) ), 403 );
 		}
-		check_ajax_referer( 'apogee_wp_watcher_admin', 'nonce' );
+		check_ajax_referer( 'apogee_watcher_admin', 'nonce' );
 	}
 }

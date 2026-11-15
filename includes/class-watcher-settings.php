@@ -55,21 +55,21 @@ class Apogee_Watcher_Settings {
 	 */
 	public function menu(): void {
 		add_menu_page(
-			__( 'Apogee Watcher for WordPress', 'apogee-wp-watcher' ),
-			__( 'Watcher', 'apogee-wp-watcher' ),
+			__( 'Apogee Watcher: Automated PageSpeed Monitoring', 'apogee-watcher' ),
+			__( 'Watcher', 'apogee-watcher' ),
 			'manage_options',
-			'apogee-wp-watcher',
+			'apogee-watcher',
 			array( $this, 'render_settings' ),
 			'dashicons-performance',
 			58
 		);
 
 		add_submenu_page(
-			'apogee-wp-watcher',
-			__( 'Connection', 'apogee-wp-watcher' ),
-			__( 'Connection', 'apogee-wp-watcher' ),
+			'apogee-watcher',
+			__( 'Connection', 'apogee-watcher' ),
+			__( 'Connection', 'apogee-watcher' ),
 			'manage_options',
-			'apogee-wp-watcher',
+			'apogee-watcher',
 			array( $this, 'render_settings' )
 		);
 	}
@@ -80,41 +80,41 @@ class Apogee_Watcher_Settings {
 	 * @param string $hook Hook suffix.
 	 */
 	public function assets( string $hook ): void {
-		if ( false === strpos( $hook, 'apogee-wp-watcher' ) && 'index.php' !== $hook ) {
+		if ( false === strpos( $hook, 'apogee-watcher' ) && 'index.php' !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'apogee-wp-watcher-admin',
-			APOGEE_WP_WATCHER_URL . 'assets/css/admin.css',
+			'apogee-watcher-admin',
+			APOGEE_WATCHER_URL . 'assets/css/admin.css',
 			array(),
-			APOGEE_WP_WATCHER_VERSION
+			APOGEE_WATCHER_VERSION
 		);
 
-		if ( false !== strpos( $hook, 'apogee-wp-watcher' ) ) {
+		if ( false !== strpos( $hook, 'apogee-watcher' ) ) {
 			wp_enqueue_script(
-				'apogee-wp-watcher-admin',
-				APOGEE_WP_WATCHER_URL . 'assets/js/admin.js',
+				'apogee-watcher-admin',
+				APOGEE_WATCHER_URL . 'assets/js/admin.js',
 				array(),
-				APOGEE_WP_WATCHER_VERSION,
+				APOGEE_WATCHER_VERSION,
 				true
 			);
 			wp_localize_script(
-				'apogee-wp-watcher-admin',
+				'apogee-watcher-admin',
 				'apogeeWpWatcher',
 				array(
 					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-					'nonce'   => wp_create_nonce( 'apogee_wp_watcher_admin' ),
+					'nonce'   => wp_create_nonce( 'apogee_watcher_admin' ),
 					'apiBase' => $this->connection->api_base(),
 					'i18n'    => array(
-						'connecting'   => __( 'Starting pairing…', 'apogee-wp-watcher' ),
-						'waiting'      => __( 'Waiting for approval in Watcher…', 'apogee-wp-watcher' ),
-						'connected'    => __( 'Connected.', 'apogee-wp-watcher' ),
-						'disconnecting'=> __( 'Disconnecting…', 'apogee-wp-watcher' ),
-						'error'        => __( 'Something went wrong.', 'apogee-wp-watcher' ),
-						'confirmDisc'  => __( 'Disconnect this site from Apogee Watcher?', 'apogee-wp-watcher' ),
-						'bulkNeed'     => __( 'Select at least one page and a bulk action.', 'apogee-wp-watcher' ),
-						'bulkWorking'  => __( 'Updating Watcher…', 'apogee-wp-watcher' ),
+						'connecting'   => __( 'Starting pairing…', 'apogee-watcher' ),
+						'waiting'      => __( 'Waiting for approval in Watcher…', 'apogee-watcher' ),
+						'connected'    => __( 'Connected.', 'apogee-watcher' ),
+						'disconnecting'=> __( 'Disconnecting…', 'apogee-watcher' ),
+						'error'        => __( 'Something went wrong.', 'apogee-watcher' ),
+						'confirmDisc'  => __( 'Disconnect this site from Apogee Watcher?', 'apogee-watcher' ),
+						'bulkNeed'     => __( 'Select at least one page and a bulk action.', 'apogee-watcher' ),
+						'bulkWorking'  => __( 'Updating Watcher…', 'apogee-watcher' ),
 					),
 				)
 			);
@@ -136,73 +136,78 @@ class Apogee_Watcher_Settings {
 		$dashboard = $this->connection->site_admin_url();
 		$signup    = $api_base . '/sign-up?utm_source=wordpress&utm_medium=plugin&utm_campaign=settings';
 		?>
-		<div class="wrap apogee-wp-watcher-wrap">
-			<h1><?php echo esc_html__( 'Apogee Watcher for WordPress', 'apogee-wp-watcher' ); ?></h1>
-			<p class="apogee-wp-watcher-lead">
+		<div class="wrap apogee-watcher-wrap">
+			<h1><?php echo esc_html__( 'Apogee Watcher: Automated PageSpeed Monitoring', 'apogee-watcher' ); ?></h1>
+			<p class="apogee-watcher-lead">
 				<?php
 				echo esc_html__(
 					'Monitor this site’s Core Web Vitals with Apogee Watcher. No Google PageSpeed API key required in WordPress.',
-					'apogee-wp-watcher'
+					'apogee-watcher'
 				);
 				?>
 			</p>
 
-			<div class="apogee-wp-watcher-card" id="apogee-wp-watcher-connection">
-				<h2><?php echo esc_html__( 'Connection', 'apogee-wp-watcher' ); ?></h2>
+			<div class="apogee-watcher-card" id="apogee-watcher-connection">
+				<h2><?php echo esc_html__( 'Connection', 'apogee-watcher' ); ?></h2>
 
 				<?php if ( $connected ) : ?>
-					<p class="apogee-wp-watcher-status is-connected">
-						<strong><?php echo esc_html__( 'Connected', 'apogee-wp-watcher' ); ?></strong>
+					<p class="apogee-watcher-status is-connected">
+						<strong><?php echo esc_html__( 'Connected', 'apogee-watcher' ); ?></strong>
 						<?php if ( $host ) : ?>
 							— <?php echo esc_html( $host ); ?>
 						<?php endif; ?>
 						<?php if ( $site_id ) : ?>
-							<span class="apogee-wp-watcher-muted">(site #<?php echo esc_html( $site_id ); ?>)</span>
+							<span class="apogee-watcher-muted">(site #<?php echo esc_html( $site_id ); ?>)</span>
 						<?php endif; ?>
 					</p>
 					<p>
 						<a class="button" href="<?php echo esc_url( $dashboard ); ?>" target="_blank" rel="noopener noreferrer">
-							<?php echo esc_html__( 'Open Watcher dashboard', 'apogee-wp-watcher' ); ?>
+							<?php echo esc_html__( 'Open Watcher dashboard', 'apogee-watcher' ); ?>
 						</a>
-						<button type="button" class="button button-secondary" id="apogee-wp-watcher-disconnect">
-							<?php echo esc_html__( 'Disconnect', 'apogee-wp-watcher' ); ?>
+						<button type="button" class="button button-secondary" id="apogee-watcher-disconnect">
+							<?php echo esc_html__( 'Disconnect', 'apogee-watcher' ); ?>
 						</button>
 					</p>
 				<?php else : ?>
-					<p class="apogee-wp-watcher-status is-disconnected">
-						<?php echo esc_html__( 'Not connected.', 'apogee-wp-watcher' ); ?>
+					<p class="apogee-watcher-status is-disconnected">
+						<?php echo esc_html__( 'Not connected.', 'apogee-watcher' ); ?>
 					</p>
 					<p>
 						<?php
 						echo esc_html__(
 							'Connect opens Apogee Watcher so you can create a free account (using your WordPress admin email) or sign in, then approve this site.',
-							'apogee-wp-watcher'
+							'apogee-watcher'
 						);
 						?>
 					</p>
 					<p>
-						<button type="button" class="button button-primary" id="apogee-wp-watcher-connect">
-							<?php echo esc_html__( 'Connect to Watcher', 'apogee-wp-watcher' ); ?>
+						<button type="button" class="button button-primary" id="apogee-watcher-connect">
+							<?php echo esc_html__( 'Connect to Watcher', 'apogee-watcher' ); ?>
 						</button>
 						<a class="button button-link" href="<?php echo esc_url( $signup ); ?>" target="_blank" rel="noopener noreferrer">
-							<?php echo esc_html__( 'Create free account on Watcher', 'apogee-wp-watcher' ); ?>
+							<?php echo esc_html__( 'Create free account on Watcher', 'apogee-watcher' ); ?>
 						</a>
 					</p>
-					<div id="apogee-wp-watcher-pairing" class="apogee-wp-watcher-pairing" hidden>
+					<div id="apogee-watcher-pairing" class="apogee-watcher-pairing" hidden>
 						<p>
-							<?php echo esc_html__( 'Pairing code:', 'apogee-wp-watcher' ); ?>
-							<code id="apogee-wp-watcher-user-code" class="apogee-wp-watcher-user-code"></code>
+							<?php echo esc_html__( 'Pairing code:', 'apogee-watcher' ); ?>
+							<code id="apogee-watcher-user-code" class="apogee-watcher-user-code"></code>
 						</p>
 						<p>
-							<a id="apogee-wp-watcher-verify-link" class="button button-primary" href="#" target="_blank" rel="noopener noreferrer">
-								<?php echo esc_html__( 'Open Watcher to approve', 'apogee-wp-watcher' ); ?>
-							</a>
+							<a
+								id="apogee-watcher-verify-link"
+								class="button button-primary"
+								href="#"
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label="<?php echo esc_attr__( 'Open Watcher to approve', 'apogee-watcher' ); ?>"
+							><?php echo esc_html__( 'Open Watcher to approve', 'apogee-watcher' ); ?></a>
 						</p>
-						<p id="apogee-wp-watcher-pairing-status" class="apogee-wp-watcher-muted"></p>
+						<p id="apogee-watcher-pairing-status" class="apogee-watcher-muted"></p>
 					</div>
 				<?php endif; ?>
 
-				<p id="apogee-wp-watcher-flash" class="apogee-wp-watcher-flash" role="status" aria-live="polite"></p>
+				<p id="apogee-watcher-flash" class="apogee-watcher-flash" role="status" aria-live="polite"></p>
 			</div>
 
 			<?php
@@ -211,14 +216,14 @@ class Apogee_Watcher_Settings {
 			}
 			?>
 
-			<div class="apogee-wp-watcher-card">
-				<h2><?php echo esc_html__( 'About this service', 'apogee-wp-watcher' ); ?></h2>
+			<div class="apogee-watcher-card">
+				<h2><?php echo esc_html__( 'About this service', 'apogee-watcher' ); ?></h2>
 				<p>
 					<?php
 					echo wp_kses_post(
 						sprintf(
 							/* translators: %s: apogeewatcher.com link */
-							__( 'This plugin connects to %s. When you click Connect, the site URL and your admin email (as a suggested account address) are sent to Watcher so you can approve pairing. Tokens are stored in WordPress options. See Watcher’s terms and privacy on the Watcher site.', 'apogee-wp-watcher' ),
+							__( 'This plugin connects to %s. When you click Connect, the site URL and your admin email (as a suggested account address) are sent to Watcher so you can approve pairing. Tokens are stored in WordPress options. See Watcher’s terms and privacy on the Watcher site.', 'apogee-watcher' ),
 							'<a href="' . esc_url( $api_base ) . '" target="_blank" rel="noopener noreferrer">apogeewatcher.com</a>'
 						)
 					);

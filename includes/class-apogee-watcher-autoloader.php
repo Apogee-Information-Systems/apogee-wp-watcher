@@ -30,7 +30,7 @@ class Apogee_Watcher_Autoloader {
 		}
 
 		$relative = strtolower( str_replace( '_', '-', substr( $class, strlen( 'Apogee_' ) ) ) );
-		$file     = APOGEE_WP_WATCHER_PATH . 'includes/class-' . $relative . '.php';
+		$file     = APOGEE_WATCHER_PATH . 'includes/class-' . $relative . '.php';
 
 		if ( is_readable( $file ) ) {
 			require_once $file;

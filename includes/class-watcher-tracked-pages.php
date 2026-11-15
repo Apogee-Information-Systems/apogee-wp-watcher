@@ -35,7 +35,7 @@ class Apogee_Watcher_Tracked_Pages {
 	 * Hooks.
 	 */
 	public function hooks(): void {
-		add_action( 'wp_ajax_apogee_wp_watcher_pages_bulk', array( $this, 'ajax_bulk' ) );
+		add_action( 'wp_ajax_apogee_watcher_pages_bulk', array( $this, 'ajax_bulk' ) );
 	}
 
 	/**
@@ -48,13 +48,13 @@ class Apogee_Watcher_Tracked_Pages {
 
 		$rows = $this->build_rows();
 		?>
-		<div class="apogee-wp-watcher-card" id="apogee-wp-watcher-tracked-pages">
-			<h2><?php echo esc_html__( 'Tracked pages', 'apogee-wp-watcher' ); ?></h2>
-			<p class="apogee-wp-watcher-muted">
+		<div class="apogee-watcher-card" id="apogee-watcher-tracked-pages">
+			<h2><?php echo esc_html__( 'Tracked pages', 'apogee-watcher' ); ?></h2>
+			<p class="apogee-watcher-muted">
 				<?php
 				echo esc_html__(
 					'Published WordPress pages and posts. Include adds the URL to Watcher (or resumes scheduling). Pause scheduling leaves the page in Watcher but stops scheduled tests.',
-					'apogee-wp-watcher'
+					'apogee-watcher'
 				);
 				?>
 			</p>
@@ -64,45 +64,49 @@ class Apogee_Watcher_Tracked_Pages {
 				$err_data   = $rows->get_error_data();
 				$err_status = is_array( $err_data ) ? (int) ( $err_data['status'] ?? 0 ) : 0;
 				?>
-				<p class="apogee-wp-watcher-flash is-error">
+				<p class="apogee-watcher-flash is-error">
 					<?php echo esc_html( $rows->get_error_message() ); ?>
 					<?php if ( 403 === $err_status ) : ?>
 						<?php
 						echo ' ' . esc_html__(
 							'Disconnect and Connect again so Watcher can grant page-write access.',
-							'apogee-wp-watcher'
+							'apogee-watcher'
 						);
 						?>
 					<?php endif; ?>
 				</p>
 			<?php elseif ( empty( $rows ) ) : ?>
-				<p><?php echo esc_html__( 'No published pages or posts found.', 'apogee-wp-watcher' ); ?></p>
+				<p><?php echo esc_html__( 'No published pages or posts found.', 'apogee-watcher' ); ?></p>
 			<?php else : ?>
-				<form id="apogee-wp-watcher-tracked-form" method="post" action="">
+				<form id="apogee-watcher-tracked-form" method="post" action="">
 					<div class="tablenav top">
 						<div class="alignleft actions bulkactions">
-							<label for="apogee-wp-watcher-bulk" class="screen-reader-text">
-								<?php echo esc_html__( 'Select bulk action', 'apogee-wp-watcher' ); ?>
+							<label for="apogee-watcher-bulk" class="screen-reader-text">
+								<?php echo esc_html__( 'Select bulk action', 'apogee-watcher' ); ?>
 							</label>
-							<select name="bulk_action" id="apogee-wp-watcher-bulk">
-								<option value=""><?php echo esc_html__( 'Bulk actions', 'apogee-wp-watcher' ); ?></option>
-								<option value="include"><?php echo esc_html__( 'Include in scheduled tests', 'apogee-wp-watcher' ); ?></option>
-								<option value="pause"><?php echo esc_html__( 'Pause scheduled tests', 'apogee-wp-watcher' ); ?></option>
+							<select name="bulk_action" id="apogee-watcher-bulk">
+								<option value=""><?php echo esc_html__( 'Bulk actions', 'apogee-watcher' ); ?></option>
+								<option value="include"><?php echo esc_html__( 'Include in scheduled tests', 'apogee-watcher' ); ?></option>
+								<option value="pause"><?php echo esc_html__( 'Pause scheduled tests', 'apogee-watcher' ); ?></option>
 							</select>
-							<button type="button" class="button action" id="apogee-wp-watcher-bulk-apply">
-								<?php echo esc_html__( 'Apply', 'apogee-wp-watcher' ); ?>
+							<button type="button" class="button action" id="apogee-watcher-bulk-apply">
+								<?php echo esc_html__( 'Apply', 'apogee-watcher' ); ?>
 							</button>
 						</div>
 					</div>
-					<table class="widefat striped apogee-wp-watcher-tracked-table">
+					<table class="widefat striped apogee-watcher-tracked-table">
 						<thead>
 							<tr>
 								<td class="manage-column column-cb check-column">
-									<input type="checkbox" id="apogee-wp-watcher-tracked-select-all" />
+									<input
+										type="checkbox"
+										id="apogee-watcher-tracked-select-all"
+										aria-label="<?php echo esc_attr__( 'Select all tracked pages', 'apogee-watcher' ); ?>"
+									/>
 								</td>
-								<th><?php echo esc_html__( 'Title', 'apogee-wp-watcher' ); ?></th>
-								<th><?php echo esc_html__( 'URL', 'apogee-wp-watcher' ); ?></th>
-								<th><?php echo esc_html__( 'In Watcher', 'apogee-wp-watcher' ); ?></th>
+								<th><?php echo esc_html__( 'Title', 'apogee-watcher' ); ?></th>
+								<th><?php echo esc_html__( 'URL', 'apogee-watcher' ); ?></th>
+								<th><?php echo esc_html__( 'In Watcher', 'apogee-watcher' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -111,25 +115,26 @@ class Apogee_Watcher_Tracked_Pages {
 									<th scope="row" class="check-column">
 										<input
 											type="checkbox"
-											class="apogee-wp-watcher-tracked-cb"
+											class="apogee-watcher-tracked-cb"
 											name="posts[]"
 											value="<?php echo esc_attr( (string) $row['external_id'] ); ?>"
 											data-url="<?php echo esc_attr( $row['url'] ); ?>"
 											data-title="<?php echo esc_attr( $row['title'] ); ?>"
+											aria-label="<?php echo esc_attr( sprintf( /* translators: %s: page title */ __( 'Select %s', 'apogee-watcher' ), $row['title'] ) ); ?>"
 										/>
 									</th>
 									<td>
 										<strong><?php echo esc_html( $row['title'] ); ?></strong>
-										<span class="apogee-wp-watcher-muted"> (<?php echo esc_html( $row['type'] ); ?>)</span>
+										<span class="apogee-watcher-muted"> (<?php echo esc_html( $row['type'] ); ?>)</span>
 									</td>
-									<td><code class="apogee-wp-watcher-url"><?php echo esc_html( $row['url'] ); ?></code></td>
+									<td><code class="apogee-watcher-url"><?php echo esc_html( $row['url'] ); ?></code></td>
 									<td>
 										<?php if ( $row['tracked'] && $row['active'] ) : ?>
-											<span class="apogee-wp-watcher-track is-on"><?php echo esc_html__( 'Scheduled', 'apogee-wp-watcher' ); ?></span>
+											<span class="apogee-watcher-track is-on"><?php echo esc_html__( 'Scheduled', 'apogee-watcher' ); ?></span>
 										<?php elseif ( $row['tracked'] ) : ?>
-											<span class="apogee-wp-watcher-track is-paused"><?php echo esc_html__( 'Paused', 'apogee-wp-watcher' ); ?></span>
+											<span class="apogee-watcher-track is-paused"><?php echo esc_html__( 'Paused', 'apogee-watcher' ); ?></span>
 										<?php else : ?>
-											<span class="apogee-wp-watcher-track is-off"><?php echo esc_html__( 'Not tracked', 'apogee-wp-watcher' ); ?></span>
+											<span class="apogee-watcher-track is-off"><?php echo esc_html__( 'Not tracked', 'apogee-watcher' ); ?></span>
 										<?php endif; ?>
 									</td>
 								</tr>
@@ -137,7 +142,7 @@ class Apogee_Watcher_Tracked_Pages {
 						</tbody>
 					</table>
 				</form>
-				<p id="apogee-wp-watcher-tracked-flash" class="apogee-wp-watcher-flash" role="status" aria-live="polite"></p>
+				<p id="apogee-watcher-tracked-flash" class="apogee-watcher-flash" role="status" aria-live="polite"></p>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -148,27 +153,29 @@ class Apogee_Watcher_Tracked_Pages {
 	 */
 	public function ajax_bulk(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Forbidden.', 'apogee-wp-watcher' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Forbidden.', 'apogee-watcher' ) ), 403 );
 		}
-		check_ajax_referer( 'apogee_wp_watcher_admin', 'nonce' );
+		check_ajax_referer( 'apogee_watcher_admin', 'nonce' );
 
 		if ( ! $this->connection->is_connected() ) {
-			wp_send_json_error( array( 'message' => __( 'Not connected to Watcher.', 'apogee-wp-watcher' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Not connected to Watcher.', 'apogee-watcher' ) ), 400 );
 		}
 
 		$action = isset( $_POST['bulk_action'] ) ? sanitize_key( (string) wp_unslash( $_POST['bulk_action'] ) ) : '';
 		if ( ! in_array( $action, array( 'include', 'pause' ), true ) ) {
-			wp_send_json_error( array( 'message' => __( 'Choose a bulk action.', 'apogee-wp-watcher' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Choose a bulk action.', 'apogee-watcher' ) ), 400 );
 		}
 
 		$raw = isset( $_POST['pages'] ) ? wp_unslash( $_POST['pages'] ) : '';
 		if ( is_string( $raw ) ) {
-			$decoded = json_decode( $raw, true );
+			$decoded = json_decode( sanitize_textarea_field( $raw ), true );
+		} elseif ( is_array( $raw ) ) {
+			$decoded = map_deep( $raw, 'sanitize_text_field' );
 		} else {
-			$decoded = $raw;
+			$decoded = null;
 		}
 		if ( ! is_array( $decoded ) || $decoded === array() ) {
-			wp_send_json_error( array( 'message' => __( 'Select at least one page.', 'apogee-wp-watcher' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Select at least one page.', 'apogee-watcher' ) ), 400 );
 		}
 
 		$pages   = array();
@@ -197,7 +204,7 @@ class Apogee_Watcher_Tracked_Pages {
 		}
 
 		if ( $pages === array() ) {
-			wp_send_json_error( array( 'message' => __( 'No valid pages selected.', 'apogee-wp-watcher' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'No valid pages selected.', 'apogee-watcher' ) ), 400 );
 		}
 
 		$result = $this->api->pages_batch( $pages );
@@ -205,7 +212,7 @@ class Apogee_Watcher_Tracked_Pages {
 			$status = (int) ( $result->get_error_data()['status'] ?? 400 );
 			$msg    = $result->get_error_message();
 			if ( 403 === $status ) {
-				$msg = __( 'Watcher denied page updates. Disconnect and Connect again to grant page-write access.', 'apogee-wp-watcher' );
+				$msg = __( 'Watcher denied page updates. Disconnect and Connect again to grant page-write access.', 'apogee-watcher' );
 			}
 			wp_send_json_error( array( 'message' => $msg ), $status > 0 ? $status : 400 );
 		}
@@ -225,7 +232,7 @@ class Apogee_Watcher_Tracked_Pages {
 			array(
 				'message' => sprintf(
 					/* translators: 1: updated count, 2: rejected count */
-					__( 'Updated %1$d page(s); %2$d rejected.', 'apogee-wp-watcher' ),
+					__( 'Updated %1$d page(s); %2$d rejected.', 'apogee-watcher' ),
 					$ok,
 					$bad
 				),

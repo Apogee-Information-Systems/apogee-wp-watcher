@@ -43,11 +43,11 @@ class Apogee_Watcher_Results_Page {
 	 */
 	public function menu(): void {
 		add_submenu_page(
-			'apogee-wp-watcher',
-			__( 'Test results', 'apogee-wp-watcher' ),
-			__( 'Test results', 'apogee-wp-watcher' ),
+			'apogee-watcher',
+			__( 'Test results', 'apogee-watcher' ),
+			__( 'Test results', 'apogee-watcher' ),
 			'manage_options',
-			'apogee-wp-watcher-results',
+			'apogee-watcher-results',
 			array( $this, 'render' )
 		);
 	}
@@ -60,35 +60,35 @@ class Apogee_Watcher_Results_Page {
 			return;
 		}
 
-		echo '<div class="wrap apogee-wp-watcher-wrap apogee-wp-watcher-wrap--wide">';
-		echo '<h1>' . esc_html__( 'Test results', 'apogee-wp-watcher' ) . '</h1>';
+		echo '<div class="wrap apogee-watcher-wrap apogee-watcher-wrap--wide">';
+		echo '<h1>' . esc_html__( 'Test results', 'apogee-watcher' ) . '</h1>';
 
 		if ( ! $this->connection->is_connected() ) {
 			printf(
 				'<p>%s</p><p><a class="button button-primary" href="%s">%s</a></p>',
-				esc_html__( 'Connect to Watcher to load test results.', 'apogee-wp-watcher' ),
-				esc_url( admin_url( 'admin.php?page=apogee-wp-watcher' ) ),
-				esc_html__( 'Open Connection', 'apogee-wp-watcher' )
+				esc_html__( 'Connect to Watcher to load test results.', 'apogee-watcher' ),
+				esc_url( admin_url( 'admin.php?page=apogee-watcher' ) ),
+				esc_html__( 'Open Connection', 'apogee-watcher' )
 			);
 			echo '</div>';
 			return;
 		}
 
 		$cursor = isset( $_GET['cursor'] ) ? sanitize_text_field( wp_unslash( $_GET['cursor'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$pages  = get_transient( 'apogee_wp_watcher_pages_' . md5( (string) $cursor ) );
+		$pages  = get_transient( 'apogee_watcher_pages_' . md5( (string) $cursor ) );
 		if ( false === $pages ) {
 			$pages = $this->api->get_pages( $cursor, 50 );
 			if ( ! is_wp_error( $pages ) ) {
-				set_transient( 'apogee_wp_watcher_pages_' . md5( (string) $cursor ), $pages, 10 * MINUTE_IN_SECONDS );
+				set_transient( 'apogee_watcher_pages_' . md5( (string) $cursor ), $pages, 10 * MINUTE_IN_SECONDS );
 			}
 		}
 
-		$alerts = get_transient( 'apogee_wp_watcher_alerts_recent' );
+		$alerts = get_transient( 'apogee_watcher_alerts_recent' );
 		if ( false === $alerts ) {
 			// Last 20 by id (open and resolved) — separate cache from open-only admin notices.
 			$alerts = $this->api->get_alerts( 20, false );
 			if ( ! is_wp_error( $alerts ) ) {
-				set_transient( 'apogee_wp_watcher_alerts_recent', $alerts, 10 * MINUTE_IN_SECONDS );
+				set_transient( 'apogee_watcher_alerts_recent', $alerts, 10 * MINUTE_IN_SECONDS );
 			}
 		}
 
@@ -96,19 +96,19 @@ class Apogee_Watcher_Results_Page {
 			printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( $pages->get_error_message() ) );
 		}
 
-		echo '<div class="apogee-wp-watcher-results-grid">';
-		echo '<div class="apogee-wp-watcher-results-col apogee-wp-watcher-results-col--pages">';
-		echo '<h2 class="apogee-wp-watcher-results-heading">' . esc_html__( 'Pages', 'apogee-wp-watcher' ) . '</h2>';
+		echo '<div class="apogee-watcher-results-grid">';
+		echo '<div class="apogee-watcher-results-col apogee-watcher-results-col--pages">';
+		echo '<h2 class="apogee-watcher-results-heading">' . esc_html__( 'Pages', 'apogee-watcher' ) . '</h2>';
 		$this->render_pages_panel( is_wp_error( $pages ) ? null : $pages );
 		echo '</div>';
 
-		echo '<div class="apogee-wp-watcher-results-col apogee-wp-watcher-results-col--alerts">';
-		echo '<h2 class="apogee-wp-watcher-results-heading">' . esc_html__( 'Alerts', 'apogee-wp-watcher' ) . '</h2>';
+		echo '<div class="apogee-watcher-results-col apogee-watcher-results-col--alerts">';
+		echo '<h2 class="apogee-watcher-results-heading">' . esc_html__( 'Alerts', 'apogee-watcher' ) . '</h2>';
 		$this->render_alerts_panel( $alerts );
 		echo '</div>';
 		echo '</div>';
 
-		echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; timestamps open that test result. Alerts show the latest 20 for this site.', 'apogee-wp-watcher' ) . '</p>';
+		echo '<p class="apogee-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; timestamps open that test result. Alerts show the latest 20 for this site.', 'apogee-watcher' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -119,32 +119,32 @@ class Apogee_Watcher_Results_Page {
 	 */
 	private function render_pages_panel( ?array $pages ): void {
 		if ( null === $pages ) {
-			echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Could not load pages.', 'apogee-wp-watcher' ) . '</p>';
+			echo '<p class="apogee-watcher-muted">' . esc_html__( 'Could not load pages.', 'apogee-watcher' ) . '</p>';
 			return;
 		}
 
 		$rows = isset( $pages['data'] ) && is_array( $pages['data'] ) ? $pages['data'] : array();
 		if ( ! $rows ) {
-			echo '<p>' . esc_html__( 'No monitored pages yet. Add pages in the Watcher dashboard, then return here.', 'apogee-wp-watcher' ) . '</p>';
+			echo '<p>' . esc_html__( 'No monitored pages yet. Add pages in the Watcher dashboard, then return here.', 'apogee-watcher' ) . '</p>';
 			printf(
 				'<p><a class="button" href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
 				esc_url( $this->connection->site_admin_url() ),
-				esc_html__( 'Open Watcher', 'apogee-wp-watcher' )
+				esc_html__( 'Open Watcher', 'apogee-watcher' )
 			);
 			return;
 		}
 
-		echo '<table class="widefat striped apogee-wp-watcher-table">';
+		echo '<table class="widefat striped apogee-watcher-table">';
 		echo '<thead><tr>';
 		foreach (
 			array(
-				__( 'Page', 'apogee-wp-watcher' ),
-				__( 'Tested', 'apogee-wp-watcher' ),
-				__( 'Mobile', 'apogee-wp-watcher' ),
-				__( 'Desktop', 'apogee-wp-watcher' ),
-				__( 'LCP (m)', 'apogee-wp-watcher' ),
-				__( 'INP (m)', 'apogee-wp-watcher' ),
-				__( 'CLS (m)', 'apogee-wp-watcher' ),
+				__( 'Page', 'apogee-watcher' ),
+				__( 'Tested', 'apogee-watcher' ),
+				__( 'Mobile', 'apogee-watcher' ),
+				__( 'Desktop', 'apogee-watcher' ),
+				__( 'LCP (m)', 'apogee-watcher' ),
+				__( 'INP (m)', 'apogee-watcher' ),
+				__( 'CLS (m)', 'apogee-watcher' ),
 			) as $h
 		) {
 			printf( '<th>%s</th>', esc_html( $h ) );
@@ -175,13 +175,13 @@ class Apogee_Watcher_Results_Page {
 				esc_url(
 					add_query_arg(
 						array(
-							'page'   => 'apogee-wp-watcher-results',
+							'page'   => 'apogee-watcher-results',
 							'cursor' => $next,
 						),
 						admin_url( 'admin.php' )
 					)
 				),
-				esc_html__( 'Next page', 'apogee-wp-watcher' )
+				esc_html__( 'Next page', 'apogee-watcher' )
 			);
 		}
 	}
@@ -194,7 +194,7 @@ class Apogee_Watcher_Results_Page {
 	private function render_alerts_panel( $alerts ): void {
 		if ( is_wp_error( $alerts ) ) {
 			printf(
-				'<p class="apogee-wp-watcher-muted">%s</p>',
+				'<p class="apogee-watcher-muted">%s</p>',
 				esc_html( $alerts->get_error_message() )
 			);
 			return;
@@ -202,19 +202,19 @@ class Apogee_Watcher_Results_Page {
 
 		$rows = isset( $alerts['data'] ) && is_array( $alerts['data'] ) ? $alerts['data'] : array();
 		if ( ! $rows ) {
-			echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'No alerts for this site yet.', 'apogee-wp-watcher' ) . '</p>';
+			echo '<p class="apogee-watcher-muted">' . esc_html__( 'No alerts for this site yet.', 'apogee-watcher' ) . '</p>';
 			return;
 		}
 
-		echo '<table class="widefat striped apogee-wp-watcher-table apogee-wp-watcher-alerts-table">';
+		echo '<table class="widefat striped apogee-watcher-table apogee-watcher-alerts-table">';
 		echo '<thead><tr>';
 		foreach (
 			array(
-				__( 'When', 'apogee-wp-watcher' ),
-				__( 'Metric', 'apogee-wp-watcher' ),
-				__( 'Strategy', 'apogee-wp-watcher' ),
-				__( 'Actual', 'apogee-wp-watcher' ),
-				__( 'Status', 'apogee-wp-watcher' ),
+				__( 'When', 'apogee-watcher' ),
+				__( 'Metric', 'apogee-watcher' ),
+				__( 'Strategy', 'apogee-watcher' ),
+				__( 'Actual', 'apogee-watcher' ),
+				__( 'Status', 'apogee-watcher' ),
 			) as $h
 		) {
 			printf( '<th>%s</th>', esc_html( $h ) );
@@ -233,8 +233,8 @@ class Apogee_Watcher_Results_Page {
 				: '—';
 			$resolved = ! empty( $row['resolved'] );
 			$status   = $resolved
-				? __( 'Resolved', 'apogee-wp-watcher' )
-				: __( 'Open', 'apogee-wp-watcher' );
+				? __( 'Resolved', 'apogee-watcher' )
+				: __( 'Open', 'apogee-watcher' );
 			$href     = $this->alert_watcher_url( $row );
 
 			echo '<tr>';
@@ -251,7 +251,7 @@ class Apogee_Watcher_Results_Page {
 			printf( '<td>%s</td>', esc_html( $strategy ) );
 			printf( '<td>%s</td>', esc_html( $actual ) );
 			printf(
-				'<td><span class="apogee-wp-watcher-alert-status %s">%s</span></td>',
+				'<td><span class="apogee-watcher-alert-status %s">%s</span></td>',
 				$resolved ? 'is-resolved' : 'is-open',
 				esc_html( $status )
 			);
@@ -260,9 +260,9 @@ class Apogee_Watcher_Results_Page {
 		echo '</tbody></table>';
 
 		printf(
-			'<p class="apogee-wp-watcher-muted"><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
+			'<p class="apogee-watcher-muted"><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
 			esc_url( $this->connection->api_base() . '/admin/watcher-alerts' ),
-			esc_html__( 'View all alerts in Watcher', 'apogee-wp-watcher' )
+			esc_html__( 'View all alerts in Watcher', 'apogee-watcher' )
 		);
 	}
 
@@ -301,12 +301,12 @@ class Apogee_Watcher_Results_Page {
 		$secondary = '';
 		if ( $url !== '' && $url !== $title ) {
 			$secondary = sprintf(
-				'<div class="apogee-wp-watcher-muted"><code>%s</code></div>',
+				'<div class="apogee-watcher-muted"><code>%s</code></div>',
 				esc_html( $url )
 			);
 		}
 
-		return '<div class="apogee-wp-watcher-page-cell">' . $title_html . $secondary . '</div>';
+		return '<div class="apogee-watcher-page-cell">' . $title_html . $secondary . '</div>';
 	}
 
 	/**
@@ -365,7 +365,7 @@ class Apogee_Watcher_Results_Page {
 
 		$url = (string) ( $row['url'] ?? '' );
 		if ( $url === '' ) {
-			return __( 'Untitled page', 'apogee-wp-watcher' );
+			return __( 'Untitled page', 'apogee-watcher' );
 		}
 
 		$path = wp_parse_url( $url, PHP_URL_PATH );

@@ -38,7 +38,7 @@ class Apogee_Watcher_Api_Client {
 		$body = array(
 			'client_id'        => self::CLIENT_ID,
 			'site_url'         => $this->connection->site_url_for_pairing(),
-			'plugin_version'   => APOGEE_WP_WATCHER_VERSION,
+			'plugin_version'   => APOGEE_WATCHER_VERSION,
 			'scope'            => 'site:read site:alerts:read site:pages:write',
 			'suggested_email'  => $email,
 		);
@@ -118,7 +118,7 @@ class Apogee_Watcher_Api_Client {
 	public function get_overview() {
 		$site_id = (string) $this->connection->get( 'site_id', '' );
 		if ( $site_id === '' ) {
-			return new WP_Error( 'apogee_wp_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-wp-watcher' ) );
+			return new WP_Error( 'apogee_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-watcher' ) );
 		}
 		return $this->authenticated_get( '/api/v1/sites/' . rawurlencode( $site_id ) . '/overview' );
 	}
@@ -133,7 +133,7 @@ class Apogee_Watcher_Api_Client {
 	public function get_pages( ?string $cursor = null, int $limit = 50 ) {
 		$site_id = (string) $this->connection->get( 'site_id', '' );
 		if ( $site_id === '' ) {
-			return new WP_Error( 'apogee_wp_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-wp-watcher' ) );
+			return new WP_Error( 'apogee_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-watcher' ) );
 		}
 		$query = array( 'limit' => max( 1, min( 100, $limit ) ) );
 		if ( is_string( $cursor ) && $cursor !== '' ) {
@@ -153,7 +153,7 @@ class Apogee_Watcher_Api_Client {
 	public function get_alerts( int $limit = 20, bool $open_only = true ) {
 		$site_id = (string) $this->connection->get( 'site_id', '' );
 		if ( $site_id === '' ) {
-			return new WP_Error( 'apogee_wp_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-wp-watcher' ) );
+			return new WP_Error( 'apogee_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-watcher' ) );
 		}
 		$query = array(
 			'limit' => max( 1, min( 100, $limit ) ),
@@ -172,7 +172,7 @@ class Apogee_Watcher_Api_Client {
 	public function pages_batch( array $pages ) {
 		$site_id = (string) $this->connection->get( 'site_id', '' );
 		if ( $site_id === '' ) {
-			return new WP_Error( 'apogee_wp_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-wp-watcher' ) );
+			return new WP_Error( 'apogee_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-watcher' ) );
 		}
 
 		$path = '/api/v1/sites/' . rawurlencode( $site_id ) . '/pages/batch';
@@ -273,7 +273,7 @@ class Apogee_Watcher_Api_Client {
 	public function refresh_access_token() {
 		$refresh = (string) $this->connection->get( 'refresh_token', '' );
 		if ( $refresh === '' ) {
-			return new WP_Error( 'apogee_wp_watcher_no_refresh', __( 'Missing refresh token. Reconnect to Watcher.', 'apogee-wp-watcher' ) );
+			return new WP_Error( 'apogee_watcher_no_refresh', __( 'Missing refresh token. Reconnect to Watcher.', 'apogee-watcher' ) );
 		}
 
 		$result = $this->oauth_token(
@@ -288,7 +288,7 @@ class Apogee_Watcher_Api_Client {
 		}
 
 		if ( empty( $result['access_token'] ) ) {
-			return new WP_Error( 'apogee_wp_watcher_refresh_failed', __( 'Could not refresh the Watcher token.', 'apogee-wp-watcher' ) );
+			return new WP_Error( 'apogee_watcher_refresh_failed', __( 'Could not refresh the Watcher token.', 'apogee-watcher' ) );
 		}
 
 		$this->connection->store_tokens( $result );
@@ -309,7 +309,7 @@ class Apogee_Watcher_Api_Client {
 
 		$headers = array(
 			'Accept'     => 'application/json',
-			'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WP_WATCHER_VERSION . '; ' . home_url( '/' ),
+			'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WATCHER_VERSION . '; ' . home_url( '/' ),
 		);
 
 		if ( ! empty( $args['extra_headers'] ) && is_array( $args['extra_headers'] ) ) {
@@ -327,7 +327,7 @@ class Apogee_Watcher_Api_Client {
 		if ( $use_auth ) {
 			$token = (string) $this->connection->get( 'access_token', '' );
 			if ( $token === '' ) {
-				return new WP_Error( 'apogee_wp_watcher_no_token', __( 'Not connected to Watcher.', 'apogee-wp-watcher' ) );
+				return new WP_Error( 'apogee_watcher_no_token', __( 'Not connected to Watcher.', 'apogee-watcher' ) );
 			}
 			$headers['Authorization'] = 'Bearer ' . $token;
 		}
@@ -376,13 +376,13 @@ class Apogee_Watcher_Api_Client {
 		} else {
 			$message = sprintf(
 				/* translators: %d: HTTP status code */
-				__( 'Watcher API error (HTTP %d).', 'apogee-wp-watcher' ),
+				__( 'Watcher API error (HTTP %d).', 'apogee-watcher' ),
 				$status
 			);
 		}
 
 		return new WP_Error(
-			'apogee_wp_watcher_http_' . $status,
+			'apogee_watcher_http_' . $status,
 			$message,
 			array(
 				'status'      => $status,

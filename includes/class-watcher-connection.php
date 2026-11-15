@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Apogee_Watcher_Connection {
 
-	public const OPTION_KEY = 'apogee_wp_watcher_settings';
+	public const OPTION_KEY = 'apogee_watcher_settings';
 
 	/**
 	 * Default option shape (tokens only — API base is fixed in code).
@@ -64,10 +64,10 @@ class Apogee_Watcher_Connection {
 	 */
 	public function disconnect(): void {
 		update_option( self::OPTION_KEY, self::defaults(), false );
-		delete_transient( 'apogee_wp_watcher_overview' );
-		delete_transient( 'apogee_wp_watcher_alerts' );
-		delete_transient( 'apogee_wp_watcher_pages' );
-		delete_transient( 'apogee_wp_watcher_device_pending' );
+		delete_transient( 'apogee_watcher_overview' );
+		delete_transient( 'apogee_watcher_alerts' );
+		delete_transient( 'apogee_watcher_pages' );
+		delete_transient( 'apogee_watcher_device_pending' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Apogee_Watcher_Connection {
 	 * Production Watcher API origin (no trailing slash).
 	 */
 	public function api_base(): string {
-		return APOGEE_WP_WATCHER_API_BASE;
+		return APOGEE_WATCHER_API_BASE;
 	}
 
 	/**

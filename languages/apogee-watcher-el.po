@@ -1,166 +1,158 @@
-# Apogee Watcher for WordPress.
-# Copyright (C) YEAR Apogee Information Systems
-# This file is distributed under the same license as the Apogee Watcher for WordPress package.
+# Apogee Watcher: Automated PageSpeed Monitoring — el
+# Copyright (C) 2026 Apogee Information Systems
+# This file is distributed under the same license as the Apogee Watcher: Automated PageSpeed Monitoring package.
 # Apogee Information Systems <info@apogee.gr>, 2026.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Apogee Watcher for WordPress 0.2.0\n"
-"Report-Msgid-Bugs-To: https://github.com/Apogee-Information-Systems/apogee-"
-"wp-watcher/issues\n"
+"Project-Id-Version: Apogee Watcher: Automated PageSpeed Monitoring 0.3.1\n"
+"Report-Msgid-Bugs-To: https://github.com/Apogee-Information-Systems/apogee-wp-watcher/issues\n"
 "POT-Creation-Date: 2026-11-15 16:53+0100\n"
-"PO-Revision-Date: 2026-11-15 16:53+0100\n"
+"PO-Revision-Date: 2026-11-15 15:54+0000\n"
 "Last-Translator: Apogee Information Systems <info@apogee.gr>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Greek\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: includes/class-watcher-admin-notices.php:84
 msgid "Apogee Watcher:"
-msgstr ""
+msgstr "Apogee Watcher:"
 
 #: includes/class-watcher-admin-notices.php:89
 #, php-format
 msgid "%1$d open alert (%2$s · %3$s)."
 msgid_plural "%1$d open alerts (e.g. %2$s · %3$s)."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1$d ανοιχτή ειδοποίηση (%2$s · %3$s)."
+msgstr[1] "%1$d ανοιχτές ειδοποιήσεις (π.χ. %2$s · %3$s)."
 
 #: includes/class-watcher-admin-notices.php:100
 msgid "Results"
-msgstr ""
+msgstr "Αποτελέσματα"
 
 #: includes/class-watcher-admin-notices.php:102
 msgid "Investigate in Watcher"
-msgstr ""
+msgstr "Έλεγχος στο Watcher"
 
-#: includes/class-watcher-api-client.php:121
-#: includes/class-watcher-api-client.php:136
 #: includes/class-watcher-api-client.php:156
 msgid "No Watcher site is linked."
-msgstr ""
+msgstr "Δεν υπάρχει συνδεδεμένος ιστότοπος Watcher."
 
 #: includes/class-watcher-api-client.php:216
 msgid "Missing refresh token. Reconnect to Watcher."
-msgstr ""
+msgstr "Λείπει το refresh token. Συνδεθείτε ξανά στο Watcher."
 
 #: includes/class-watcher-api-client.php:231
 msgid "Could not refresh the Watcher token."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η ανανέωση του token Watcher."
 
 #: includes/class-watcher-api-client.php:262
 msgid "Not connected to Watcher."
-msgstr ""
+msgstr "Δεν είστε συνδεδεμένοι στο Watcher."
 
-#. translators: %d: HTTP status code
 #: includes/class-watcher-api-client.php:311
 #, php-format
 msgid "Watcher API error (HTTP %d)."
-msgstr ""
+msgstr "Σφάλμα API Watcher (HTTP %d)."
 
-#: includes/class-watcher-dashboard-widget.php:50
-#: includes/class-watcher-settings.php:47
-#: includes/class-watcher-settings.php:127
 #: includes/class-watcher-updater.php:114
-msgid "Apogee Watcher for WordPress"
-msgstr ""
+msgid "Apogee Watcher: Automated PageSpeed Monitoring"
+msgstr "Apogee Watcher: Αυτοματοποιημένη παρακολούθηση PageSpeed"
 
 #: includes/class-watcher-dashboard-widget.php:62
 msgid "Connect this site to Apogee Watcher to see Core Web Vitals here."
 msgstr ""
+"Συνδέστε αυτόν τον ιστότοπο στο Apogee Watcher για να δείτε εδώ τα"
+"Core Web Vitals."
 
 #: includes/class-watcher-dashboard-widget.php:64
 msgid "Connect"
-msgstr ""
+msgstr "Σύνδεση"
 
 #: includes/class-watcher-dashboard-widget.php:100
 msgid "Performance"
-msgstr ""
+msgstr "Απόδοση"
 
 #: includes/class-watcher-dashboard-widget.php:116
 msgid "Last test:"
-msgstr ""
+msgstr "Τελευταίος έλεγχος:"
 
 #: includes/class-watcher-dashboard-widget.php:121
 msgid "No completed tests yet for this site."
-msgstr ""
+msgstr "Δεν υπάρχουν ακόμη ολοκληρωμένοι έλεγχοι για αυτόν τον ιστότοπο."
 
 #: includes/class-watcher-dashboard-widget.php:127
 msgid "Attention-free:"
-msgstr ""
+msgstr "Χωρίς προσοχή:"
 
-#. translators: %d: open alert count
 #: includes/class-watcher-dashboard-widget.php:140
 #, php-format
 msgid "%d open alert"
 msgid_plural "%d open alerts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d ανοιχτή ειδοποίηση"
+msgstr[1] "%d ανοιχτές ειδοποιήσεις"
 
-#: includes/class-watcher-dashboard-widget.php:150
-#: includes/class-watcher-results-page.php:47
-#: includes/class-watcher-results-page.php:48
 #: includes/class-watcher-results-page.php:64
 msgid "Test results"
-msgstr ""
+msgstr "Αποτελέσματα ελέγχων"
 
 #: includes/class-watcher-dashboard-widget.php:152
 msgid "View in Watcher"
-msgstr ""
+msgstr "Προβολή στο Watcher"
 
 #: includes/class-watcher-oauth.php:53
 msgid "Already connected. Disconnect first to pair again."
-msgstr ""
+msgstr "Ήδη συνδεδεμένο. Αποσυνδεθείτε πρώτα για νέα σύζευξη."
 
 #: includes/class-watcher-oauth.php:67
 msgid "Watcher returned an invalid verification URL."
-msgstr ""
+msgstr "Το Watcher επέστρεψε μη έγκυρο URL επαλήθευσης."
 
 #: includes/class-watcher-oauth.php:104
 msgid "No pairing in progress. Start Connect again."
-msgstr ""
+msgstr "Δεν υπάρχει ενεργή σύζευξη. Ξεκινήστε ξανά τη Σύνδεση."
 
 #: includes/class-watcher-oauth.php:129 includes/class-watcher-settings.php:100
 msgid "Waiting for approval in Watcher…"
-msgstr ""
+msgstr "Αναμονή έγκρισης στο Watcher…"
 
 #: includes/class-watcher-oauth.php:144
 msgid "Unexpected token response."
-msgstr ""
+msgstr "Απρόσμενη απάντηση token."
 
 #: includes/class-watcher-oauth.php:164
 msgid "Connected to Apogee Watcher."
-msgstr ""
+msgstr "Συνδεθήκατε στο Apogee Watcher."
 
 #: includes/class-watcher-oauth.php:181
 msgid "Disconnected from Watcher."
-msgstr ""
+msgstr "Αποσυνδεθήκατε από το Watcher."
 
 #: includes/class-watcher-oauth.php:191
 msgid "Forbidden."
-msgstr ""
+msgstr "Απαγορεύεται."
 
 #: includes/class-watcher-plugin.php:82
 msgid "Settings"
-msgstr ""
+msgstr "Ρυθμίσεις"
 
 #: includes/class-watcher-results-page.php:69
 msgid "Connect to Watcher to load test results."
-msgstr ""
+msgstr "Συνδεθείτε στο Watcher για να φορτωθούν τα αποτελέσματα."
 
 #: includes/class-watcher-results-page.php:71
 msgid "Open Connection"
-msgstr ""
+msgstr "Άνοιγμα σύνδεσης"
 
 #: includes/class-watcher-results-page.php:101
 msgid "Pages"
-msgstr ""
+msgstr "Σελίδες"
 
 #: includes/class-watcher-results-page.php:106
 msgid "Alerts"
-msgstr ""
+msgstr "Ειδοποιήσεις"
 
 #: includes/class-watcher-results-page.php:111
 msgid ""
@@ -168,171 +160,179 @@ msgid ""
 "Watcher; timestamps open that test result. Alerts show the latest 20 for "
 "this site."
 msgstr ""
+"Οι χρόνοι εργαστηρίου είναι σε δευτερόλεπτα (μονάδες Watcher). Οι"
+"τίτλοι σελίδων ανοίγουν τη σελίδα στο Watcher· οι χρονικές σήμανσεις"
+"ανοίγουν το αντίστοιχο αποτέλεσμα. Οι ειδοποιήσεις δείχνουν τις 20 πιο"
+"πρόσφατες για αυτόν τον ιστότοπο."
 
 #: includes/class-watcher-results-page.php:122
 msgid "Could not load pages."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η φόρτωση των σελίδων."
 
 #: includes/class-watcher-results-page.php:128
 msgid ""
 "No monitored pages yet. Add pages in the Watcher dashboard, then return here."
 msgstr ""
+"Δεν υπάρχουν ακόμη παρακολουθούμενες σελίδες. Προσθέστε σελίδες στον"
+"πίνακα του Watcher και επιστρέψτε εδώ."
 
 #: includes/class-watcher-results-page.php:132
 msgid "Open Watcher"
-msgstr ""
+msgstr "Άνοιγμα Watcher"
 
 #: includes/class-watcher-results-page.php:141
 msgid "Page"
-msgstr ""
+msgstr "Σελίδα"
 
 #: includes/class-watcher-results-page.php:142
 msgid "Tested"
-msgstr ""
+msgstr "Ελέγχθηκε"
 
 #: includes/class-watcher-results-page.php:143
 msgid "Mobile"
-msgstr ""
+msgstr "Κινητό"
 
 #: includes/class-watcher-results-page.php:144
 msgid "Desktop"
-msgstr ""
+msgstr "Επιτραπέζιο"
 
 #: includes/class-watcher-results-page.php:145
 msgid "LCP (m)"
-msgstr ""
+msgstr "LCP (m)"
 
 #: includes/class-watcher-results-page.php:146
 msgid "INP (m)"
-msgstr ""
+msgstr "INP (m)"
 
 #: includes/class-watcher-results-page.php:147
 msgid "CLS (m)"
-msgstr ""
+msgstr "CLS (m)"
 
 #: includes/class-watcher-results-page.php:184
 msgid "Next page"
-msgstr ""
+msgstr "Επόμενη σελίδα"
 
 #: includes/class-watcher-results-page.php:205
 msgid "No alerts for this site yet."
-msgstr ""
+msgstr "Δεν υπάρχουν ακόμη ειδοποιήσεις για αυτόν τον ιστότοπο."
 
 #: includes/class-watcher-results-page.php:213
 msgid "When"
-msgstr ""
+msgstr "Πότε"
 
 #: includes/class-watcher-results-page.php:214
 msgid "Metric"
-msgstr ""
+msgstr "Μετρική"
 
 #: includes/class-watcher-results-page.php:215
 msgid "Strategy"
-msgstr ""
+msgstr "Στρατηγική"
 
 #: includes/class-watcher-results-page.php:216
 msgid "Actual"
-msgstr ""
+msgstr "Τιμή"
 
 #: includes/class-watcher-results-page.php:217
 msgid "Status"
-msgstr ""
+msgstr "Κατάσταση"
 
 #: includes/class-watcher-results-page.php:236
 msgid "Resolved"
-msgstr ""
+msgstr "Επιλύθηκε"
 
 #: includes/class-watcher-results-page.php:237
 msgid "Open"
-msgstr ""
+msgstr "Ανοιχτή"
 
 #: includes/class-watcher-results-page.php:265
 msgid "View all alerts in Watcher"
-msgstr ""
+msgstr "Όλες οι ειδοποιήσεις στο Watcher"
 
 #: includes/class-watcher-results-page.php:368
 msgid "Untitled page"
-msgstr ""
+msgstr "Σελίδα χωρίς τίτλο"
 
 #: includes/class-watcher-settings.php:48
 msgid "Watcher"
-msgstr ""
+msgstr "Watcher"
 
-#: includes/class-watcher-settings.php:58
-#: includes/class-watcher-settings.php:59
 #: includes/class-watcher-settings.php:138
 msgid "Connection"
-msgstr ""
+msgstr "Σύνδεση"
 
 #: includes/class-watcher-settings.php:99
 msgid "Starting pairing…"
-msgstr ""
+msgstr "Έναρξη σύζευξης…"
 
 #: includes/class-watcher-settings.php:101
 msgid "Connected."
-msgstr ""
+msgstr "Συνδεδεμένο."
 
 #: includes/class-watcher-settings.php:102
 msgid "Disconnecting…"
-msgstr ""
+msgstr "Αποσύνδεση…"
 
 #: includes/class-watcher-settings.php:103
 msgid "Something went wrong."
-msgstr ""
+msgstr "Κάτι πήγε στραβά."
 
 #: includes/class-watcher-settings.php:104
 msgid "Disconnect this site from Apogee Watcher?"
-msgstr ""
+msgstr "Αποσύνδεση αυτού του ιστότοπου από το Apogee Watcher;"
 
 #: includes/class-watcher-settings.php:131
 msgid ""
 "Monitor this site’s Core Web Vitals with Apogee Watcher. No Google PageSpeed "
 "API key required in WordPress."
 msgstr ""
+"Παρακολουθήστε τα Core Web Vitals αυτού του ιστότοπου με το Apogee"
+"Watcher. Δεν απαιτείται κλειδί Google PageSpeed API στο WordPress."
 
 #: includes/class-watcher-settings.php:142
 msgid "Connected"
-msgstr ""
+msgstr "Συνδεδεμένο"
 
 #: includes/class-watcher-settings.php:152
 msgid "Open Watcher dashboard"
-msgstr ""
+msgstr "Άνοιγμα πίνακα Watcher"
 
 #: includes/class-watcher-settings.php:155
 msgid "Disconnect"
-msgstr ""
+msgstr "Αποσύνδεση"
 
 #: includes/class-watcher-settings.php:160
 msgid "Not connected."
-msgstr ""
+msgstr "Μη συνδεδεμένο."
 
 #: includes/class-watcher-settings.php:165
 msgid ""
 "Connect opens Apogee Watcher so you can create a free account (using your "
 "WordPress admin email) or sign in, then approve this site."
 msgstr ""
+"Η Σύνδεση ανοίγει το Apogee Watcher ώστε να δημιουργήσετε δωρεάν"
+"λογαριασμό (με το email διαχειριστή WordPress) ή να συνδεθείτε και να"
+"εγκρίνετε αυτόν τον ιστότοπο."
 
 #: includes/class-watcher-settings.php:172
 msgid "Connect to Watcher"
-msgstr ""
+msgstr "Σύνδεση στο Watcher"
 
 #: includes/class-watcher-settings.php:175
 msgid "Create free account on Watcher"
-msgstr ""
+msgstr "Δημιουργία δωρεάν λογαριασμού στο Watcher"
 
 #: includes/class-watcher-settings.php:180
 msgid "Pairing code:"
-msgstr ""
+msgstr "Κωδικός σύζευξης:"
 
 #: includes/class-watcher-settings.php:185
 msgid "Open Watcher to approve"
-msgstr ""
+msgstr "Άνοιγμα Watcher για έγκριση"
 
 #: includes/class-watcher-settings.php:196
 msgid "About this service"
-msgstr ""
+msgstr "Σχετικά με αυτή την υπηρεσία"
 
-#. translators: %s: apogeewatcher.com link
 #: includes/class-watcher-settings.php:202
 #, php-format
 msgid ""
@@ -341,6 +341,11 @@ msgid ""
 "approve pairing. Tokens are stored in WordPress options. See Watcher’s terms "
 "and privacy on the Watcher site."
 msgstr ""
+"Αυτό το πρόσθετο συνδέεται στο %s. Όταν πατήσετε Σύνδεση, η διεύθυνση"
+"του ιστότοπου και το email διαχειριστή σας (ως προτεινόμενη διεύθυνση"
+"λογαριασμού) αποστέλλονται στο Watcher για έγκριση της σύζευξης. Τα"
+"tokens αποθηκεύονται στις επιλογές του WordPress. Δείτε τους όρους και"
+"την πολιτική απορρήτου στο site του Watcher."
 
 #: includes/class-watcher-updater.php:103
 msgid ""
@@ -348,11 +353,14 @@ msgid ""
 "Lighthouse scores in the dashboard without a Google PageSpeed API key in "
 "WordPress."
 msgstr ""
+"Συνδέστε τον ιστότοπο WordPress σας στο Apogee Watcher. Δείτε Core Web"
+"Vitals και βαθμολογίες Lighthouse στον πίνακα ελέγχου χωρίς κλειδί"
+"Google PageSpeed API στο WordPress."
 
 #: includes/class-watcher-updater.php:139
 msgid "Update check recently failed."
-msgstr ""
+msgstr "Ο έλεγχος ενημερώσεων απέτυχε πρόσφατα."
 
 #: includes/class-watcher-updater.php:166
 msgid "Invalid update response."
-msgstr ""
+msgstr "Μη έγκυρη απάντηση ενημέρωσης."

@@ -46,8 +46,8 @@ class Apogee_Watcher_Dashboard_Widget {
 			return;
 		}
 		wp_add_dashboard_widget(
-			'apogee_wp_watcher_overview',
-			__( 'Apogee Watcher for WordPress', 'apogee-wp-watcher' ),
+			'apogee_watcher_overview',
+			__( 'Apogee Watcher: Automated PageSpeed Monitoring', 'apogee-watcher' ),
 			array( $this, 'render' )
 		);
 	}
@@ -59,24 +59,24 @@ class Apogee_Watcher_Dashboard_Widget {
 		if ( ! $this->connection->is_connected() ) {
 			printf(
 				'<p>%s</p><p><a class="button button-primary" href="%s">%s</a></p>',
-				esc_html__( 'Connect this site to Apogee Watcher to see Core Web Vitals here.', 'apogee-wp-watcher' ),
-				esc_url( admin_url( 'admin.php?page=apogee-wp-watcher' ) ),
-				esc_html__( 'Connect', 'apogee-wp-watcher' )
+				esc_html__( 'Connect this site to Apogee Watcher to see Core Web Vitals here.', 'apogee-watcher' ),
+				esc_url( admin_url( 'admin.php?page=apogee-watcher' ) ),
+				esc_html__( 'Connect', 'apogee-watcher' )
 			);
 			return;
 		}
 
-		$overview = get_transient( 'apogee_wp_watcher_overview' );
+		$overview = get_transient( 'apogee_watcher_overview' );
 		if ( false === $overview ) {
 			$overview = $this->api->get_overview();
 			if ( ! is_wp_error( $overview ) ) {
-				set_transient( 'apogee_wp_watcher_overview', $overview, 10 * MINUTE_IN_SECONDS );
+				set_transient( 'apogee_watcher_overview', $overview, 10 * MINUTE_IN_SECONDS );
 			}
 		}
 
 		if ( is_wp_error( $overview ) ) {
 			printf(
-				'<p class="apogee-wp-watcher-error">%s</p>',
+				'<p class="apogee-watcher-error">%s</p>',
 				esc_html( $overview->get_error_message() )
 			);
 			return;
@@ -87,20 +87,20 @@ class Apogee_Watcher_Dashboard_Widget {
 		$open   = isset( $overview['open_alerts'] ) ? (int) $overview['open_alerts'] : 0;
 		$domain = $overview['site']['domain'] ?? '';
 
-		echo '<div class="apogee-wp-watcher-widget">';
+		echo '<div class="apogee-watcher-widget">';
 		if ( $domain ) {
-			printf( '<p class="apogee-wp-watcher-muted">%s</p>', esc_html( $domain ) );
+			printf( '<p class="apogee-watcher-muted">%s</p>', esc_html( $domain ) );
 		}
 
 		if ( is_array( $latest ) ) {
 			$score = $latest['performance_score'] ?? null;
 			printf(
-				'<p class="apogee-wp-watcher-score"><span class="apogee-wp-watcher-score-value">%s</span> <span class="apogee-wp-watcher-muted">%s · %s</span></p>',
+				'<p class="apogee-watcher-score"><span class="apogee-watcher-score-value">%s</span> <span class="apogee-watcher-muted">%s · %s</span></p>',
 				esc_html( null !== $score ? (string) (int) $score : '—' ),
-				esc_html__( 'Performance', 'apogee-wp-watcher' ),
+				esc_html__( 'Performance', 'apogee-watcher' ),
 				esc_html( (string) ( $latest['strategy'] ?? '' ) )
 			);
-			echo '<ul class="apogee-wp-watcher-cwv">';
+			echo '<ul class="apogee-watcher-cwv">';
 			foreach ( array( 'lcp' => 'LCP', 'inp' => 'INP', 'cls' => 'CLS' ) as $key => $label ) {
 				$val = $latest[ $key ] ?? null;
 				printf(
@@ -112,19 +112,19 @@ class Apogee_Watcher_Dashboard_Widget {
 			echo '</ul>';
 			if ( ! empty( $latest['tested_at'] ) ) {
 				printf(
-					'<p class="apogee-wp-watcher-muted">%s %s</p>',
-					esc_html__( 'Last test:', 'apogee-wp-watcher' ),
+					'<p class="apogee-watcher-muted">%s %s</p>',
+					esc_html__( 'Last test:', 'apogee-watcher' ),
 					esc_html( (string) $latest['tested_at'] )
 				);
 			}
 		} else {
-			echo '<p>' . esc_html__( 'No completed tests yet for this site.', 'apogee-wp-watcher' ) . '</p>';
+			echo '<p>' . esc_html__( 'No completed tests yet for this site.', 'apogee-watcher' ) . '</p>';
 		}
 
 		if ( is_array( $afs ) && isset( $afs['percent'] ) && null !== $afs['percent'] ) {
 			printf(
-				'<p>%s <strong>%d%%</strong> <span class="apogee-wp-watcher-muted">(%d/%d)</span></p>',
-				esc_html__( 'Attention-free:', 'apogee-wp-watcher' ),
+				'<p>%s <strong>%d%%</strong> <span class="apogee-watcher-muted">(%d/%d)</span></p>',
+				esc_html__( 'Attention-free:', 'apogee-watcher' ),
 				(int) $afs['percent'],
 				(int) ( $afs['clear'] ?? 0 ),
 				(int) ( $afs['total'] ?? 0 )
@@ -133,11 +133,11 @@ class Apogee_Watcher_Dashboard_Widget {
 
 		if ( $open > 0 ) {
 			printf(
-				'<p class="apogee-wp-watcher-alert-count">%s</p>',
+				'<p class="apogee-watcher-alert-count">%s</p>',
 				esc_html(
 					sprintf(
 						/* translators: %d: open alert count */
-						_n( '%d open alert', '%d open alerts', $open, 'apogee-wp-watcher' ),
+						_n( '%d open alert', '%d open alerts', $open, 'apogee-watcher' ),
 						$open
 					)
 				)
@@ -146,10 +146,10 @@ class Apogee_Watcher_Dashboard_Widget {
 
 		printf(
 			'<p><a href="%s">%s</a> · <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
-			esc_url( admin_url( 'admin.php?page=apogee-wp-watcher-results' ) ),
-			esc_html__( 'Test results', 'apogee-wp-watcher' ),
+			esc_url( admin_url( 'admin.php?page=apogee-watcher-results' ) ),
+			esc_html__( 'Test results', 'apogee-watcher' ),
 			esc_url( $this->connection->site_admin_url() ),
-			esc_html__( 'View in Watcher', 'apogee-wp-watcher' )
+			esc_html__( 'View in Watcher', 'apogee-watcher' )
 		);
 		echo '</div>';
 	}
