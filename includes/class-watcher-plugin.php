@@ -56,7 +56,9 @@ class Apogee_Watcher_Plugin {
 		( new Apogee_Watcher_Updater() )->hooks();
 
 		if ( is_admin() ) {
-			( new Apogee_Watcher_Settings( $this->connection, $this->api ) )->hooks();
+			$tracked = new Apogee_Watcher_Tracked_Pages( $this->connection, $this->api );
+			$tracked->hooks();
+			( new Apogee_Watcher_Settings( $this->connection, $this->api, $tracked ) )->hooks();
 			( new Apogee_Watcher_Dashboard_Widget( $this->connection, $this->api ) )->hooks();
 			( new Apogee_Watcher_Results_Page( $this->connection, $this->api ) )->hooks();
 			( new Apogee_Watcher_Admin_Notices( $this->connection, $this->api ) )->hooks();

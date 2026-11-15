@@ -173,4 +173,71 @@
 			});
 		});
 	}
+
+	var selectAll = document.getElementById('apogee-wp-watcher-tracked-select-all');
+	var bulkApply = document.getElementById('apogee-wp-watcher-bulk-apply');
+	var trackedFlash = document.getElementById('apogee-wp-watcher-tracked-flash');
+
+	function setTrackedFlash(message, ok) {
+		if (!trackedFlash) {
+			return;
+		}
+		trackedFlash.textContent = message || '';
+		trackedFlash.classList.toggle('is-ok', !!ok);
+		trackedFlash.classList.toggle('is-error', !ok && !!message);
+	}
+
+	if (selectAll) {
+		selectAll.addEventListener('change', function () {
+			document.querySelectorAll('.apogee-wp-watcher-tracked-cb').forEach(function (cb) {
+				cb.checked = selectAll.checked;
+			});
+		});
+	}
+
+	if (bulkApply) {
+		bulkApply.addEventListener('click', function () {
+			var actionEl = document.getElementById('apogee-wp-watcher-bulk');
+			var action = actionEl ? actionEl.value : '';
+			var pages = [];
+			document.querySelectorAll('.apogee-wp-watcher-tracked-cb:checked').forEach(function (cb) {
+				pages.push({
+					external_id: cb.value,
+					url: cb.getAttribute('data-url') || '',
+					title: cb.getAttribute('data-title') || ''
+				});
+			});
+			if (!action || !pages.length) {
+				setTrackedFlash(apogeeWpWatcher.i18n.bulkNeed || apogeeWpWatcher.i18n.error, false);
+				return;
+			}
+			bulkApply.disabled = true;
+			setTrackedFlash(apogeeWpWatcher.i18n.bulkWorking || '…', true);
+			var body = new FormData();
+			body.append('action', 'apogee_wp_watcher_pages_bulk');
+			body.append('nonce', apogeeWpWatcher.nonce);
+			body.append('bulk_action', action);
+			body.append('pages', JSON.stringify(pages));
+			fetch(apogeeWpWatcher.ajaxUrl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: body
+			}).then(function (r) {
+				return r.json();
+			}).then(function (json) {
+				bulkApply.disabled = false;
+				if (json && json.success) {
+					setTrackedFlash((json.data && json.data.message) || apogeeWpWatcher.i18n.connected, true);
+					if (json.data && json.data.reload) {
+						window.location.reload();
+					}
+					return;
+				}
+				setTrackedFlash((json && json.data && json.data.message) || apogeeWpWatcher.i18n.error, false);
+			}).catch(function () {
+				bulkApply.disabled = false;
+				setTrackedFlash(apogeeWpWatcher.i18n.error, false);
+			});
+		});
+	}
 })();

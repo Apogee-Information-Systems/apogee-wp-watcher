@@ -4,7 +4,7 @@ Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.2.1
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Changelog ==
 
+= 0.3.0 =
+* Connection screen: Tracked pages table with bulk include / pause scheduled tests.
+
 = 0.2.1 =
 * Show Apogee Watcher icons on the Plugins / Updates screens (from Watcher latest API).
 
@@ -79,6 +82,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 * Initial public release: device OAuth connect, dashboard widget, test results page, and alert notices.
 
 == Upgrade Notice ==
+
+= 0.3.0 =
+Add or pause Watcher scheduled pages from the Connection screen.
 
 = 0.2.1 =
 Plugin update notices use the Apogee Watcher logo.

@@ -164,3 +164,22 @@
 .apogee-wp-watcher-pairing[hidden] {
 	display: none !important;
 }
+
+.apogee-wp-watcher-tracked-table .apogee-wp-watcher-url {
+	font-size: 12px;
+	word-break: break-all;
+}
+
+.apogee-wp-watcher-track.is-on {
+	color: #1a7a3a;
+	font-weight: 600;
+}
+
+.apogee-wp-watcher-track.is-paused {
+	color: #9a6700;
+	font-weight: 600;
+}
+
+.apogee-wp-watcher-track.is-off {
+	color: #6b6b6b;
+}

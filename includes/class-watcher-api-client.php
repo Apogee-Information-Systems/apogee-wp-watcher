@@ -39,7 +39,7 @@ class Apogee_Watcher_Api_Client {
 			'client_id'        => self::CLIENT_ID,
 			'site_url'         => $this->connection->site_url_for_pairing(),
 			'plugin_version'   => APOGEE_WP_WATCHER_VERSION,
-			'scope'            => 'site:read site:alerts:read',
+			'scope'            => 'site:read site:alerts:read site:pages:write',
 			'suggested_email'  => $email,
 		);
 
@@ -164,18 +164,70 @@ class Apogee_Watcher_Api_Client {
 	}
 
 	/**
+	 * POST /api/v1/sites/{id}/pages/batch
+	 *
+	 * @param list<array<string, mixed>> $pages Page upserts.
+	 * @return array<string, mixed>|\WP_Error
+	 */
+	public function pages_batch( array $pages ) {
+		$site_id = (string) $this->connection->get( 'site_id', '' );
+		if ( $site_id === '' ) {
+			return new WP_Error( 'apogee_wp_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-wp-watcher' ) );
+		}
+
+		$path = '/api/v1/sites/' . rawurlencode( $site_id ) . '/pages/batch';
+		$key  = wp_generate_uuid4();
+
+		// Force refresh so Watcher can merge new default scopes (e.g. site:pages:write).
+		$rotated = $this->refresh_access_token();
+		if ( is_wp_error( $rotated ) ) {
+			return $rotated;
+		}
+
+		return $this->authenticated_request(
+			'POST',
+			$path,
+			array( 'pages' => array_values( $pages ) ),
+			array(
+				'Idempotency-Key' => $key,
+			)
+		);
+	}
+
+	/**
 	 * Authenticated GET with refresh retry.
 	 *
 	 * @param string $path Path starting with /.
 	 * @return array<string, mixed>|\WP_Error
 	 */
 	private function authenticated_get( string $path ) {
+		return $this->authenticated_request( 'GET', $path, null );
+	}
+
+	/**
+	 * Authenticated request with refresh retry.
+	 *
+	 * @param string                    $method  HTTP method.
+	 * @param string                    $path    Path.
+	 * @param array<string, mixed>|null $body    JSON body.
+	 * @param array<string, string>     $headers Extra headers.
+	 * @return array<string, mixed>|\WP_Error
+	 */
+	private function authenticated_request( string $method, string $path, $body = null, array $headers = array() ) {
 		$refreshed = $this->ensure_fresh_access_token();
 		if ( is_wp_error( $refreshed ) ) {
 			return $refreshed;
 		}
 
-		$response = $this->request( 'GET', $path, null, array( 'auth' => true ) );
+		$response = $this->request(
+			$method,
+			$path,
+			$body,
+			array(
+				'auth'           => true,
+				'extra_headers'  => $headers,
+			)
+		);
 		if ( ! is_wp_error( $response ) ) {
 			return $response;
 		}
@@ -186,7 +238,15 @@ class Apogee_Watcher_Api_Client {
 			if ( is_wp_error( $rotate ) ) {
 				return $rotate;
 			}
-			return $this->request( 'GET', $path, null, array( 'auth' => true ) );
+			return $this->request(
+				$method,
+				$path,
+				$body,
+				array(
+					'auth'          => true,
+					'extra_headers' => $headers,
+				)
+			);
 		}
 
 		return $response;
@@ -251,6 +311,14 @@ class Apogee_Watcher_Api_Client {
 			'Accept'     => 'application/json',
 			'User-Agent' => 'ApogeeWpWatcher-WordPress/' . APOGEE_WP_WATCHER_VERSION . '; ' . home_url( '/' ),
 		);
+
+		if ( ! empty( $args['extra_headers'] ) && is_array( $args['extra_headers'] ) ) {
+			foreach ( $args['extra_headers'] as $h_key => $h_val ) {
+				if ( is_string( $h_key ) && is_string( $h_val ) && $h_val !== '' ) {
+					$headers[ $h_key ] = $h_val;
+				}
+			}
+		}
 
 		$content_type = $args['content_type'] ?? 'application/json';
 		$timeout      = isset( $args['timeout'] ) ? (int) $args['timeout'] : 20;

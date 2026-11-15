@@ -23,12 +23,23 @@ class Apogee_Watcher_Settings {
 	private $api;
 
 	/**
-	 * @param Apogee_Watcher_Connection $connection Connection.
-	 * @param Apogee_Watcher_Api_Client $api        API.
+	 * @var Apogee_Watcher_Tracked_Pages
 	 */
-	public function __construct( Apogee_Watcher_Connection $connection, Apogee_Watcher_Api_Client $api ) {
-		$this->connection = $connection;
-		$this->api        = $api;
+	private $tracked_pages;
+
+	/**
+	 * @param Apogee_Watcher_Connection    $connection    Connection.
+	 * @param Apogee_Watcher_Api_Client    $api           API.
+	 * @param Apogee_Watcher_Tracked_Pages $tracked_pages Tracked pages UI.
+	 */
+	public function __construct(
+		Apogee_Watcher_Connection $connection,
+		Apogee_Watcher_Api_Client $api,
+		Apogee_Watcher_Tracked_Pages $tracked_pages
+	) {
+		$this->connection    = $connection;
+		$this->api           = $api;
+		$this->tracked_pages = $tracked_pages;
 	}
 
 	/**
@@ -102,6 +113,8 @@ class Apogee_Watcher_Settings {
 						'disconnecting'=> __( 'Disconnecting…', 'apogee-wp-watcher' ),
 						'error'        => __( 'Something went wrong.', 'apogee-wp-watcher' ),
 						'confirmDisc'  => __( 'Disconnect this site from Apogee Watcher?', 'apogee-wp-watcher' ),
+						'bulkNeed'     => __( 'Select at least one page and a bulk action.', 'apogee-wp-watcher' ),
+						'bulkWorking'  => __( 'Updating Watcher…', 'apogee-wp-watcher' ),
 					),
 				)
 			);
@@ -191,6 +204,12 @@ class Apogee_Watcher_Settings {
 
 				<p id="apogee-wp-watcher-flash" class="apogee-wp-watcher-flash" role="status" aria-live="polite"></p>
 			</div>
+
+			<?php
+			if ( $connected ) {
+				$this->tracked_pages->render();
+			}
+			?>
 
 			<div class="apogee-wp-watcher-card">
 				<h2><?php echo esc_html__( 'About this service', 'apogee-wp-watcher' ); ?></h2>
