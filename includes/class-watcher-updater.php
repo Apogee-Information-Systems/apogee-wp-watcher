@@ -109,7 +109,9 @@ class Apogee_Watcher_Updater {
 		}
 
 		return (object) array(
-			'name'          => isset( $remote['name'] ) ? (string) $remote['name'] : 'Apogee Watcher for WordPress',
+			'name'          => isset( $remote['name'] )
+				? (string) $remote['name']
+				: __( 'Apogee Watcher for WordPress', 'apogee-wp-watcher' ),
 			'slug'          => 'apogee-wp-watcher',
 			'version'       => isset( $remote['version'] ) ? (string) $remote['version'] : APOGEE_WP_WATCHER_VERSION,
 			'author'        => '<a href="https://apogee.lu/">Apogee Information Systems</a>',
@@ -132,7 +134,10 @@ class Apogee_Watcher_Updater {
 		}
 
 		if ( get_transient( self::TRANSIENT_FAIL ) ) {
-			return new WP_Error( 'apogee_wp_watcher_update_fail', 'Update check recently failed.' );
+			return new WP_Error(
+				'apogee_wp_watcher_update_fail',
+				__( 'Update check recently failed.', 'apogee-wp-watcher' )
+			);
 		}
 
 		$url      = APOGEE_WP_WATCHER_API_BASE . '/api/plugin/wordpress/latest';
@@ -156,7 +161,10 @@ class Apogee_Watcher_Updater {
 		$data   = json_decode( (string) wp_remote_retrieve_body( $response ), true );
 		if ( $status < 200 || $status >= 300 || ! is_array( $data ) || empty( $data['version'] ) ) {
 			set_transient( self::TRANSIENT_FAIL, 1, 15 * MINUTE_IN_SECONDS );
-			return new WP_Error( 'apogee_wp_watcher_update_http', 'Invalid update response.' );
+			return new WP_Error(
+				'apogee_wp_watcher_update_http',
+				__( 'Invalid update response.', 'apogee-wp-watcher' )
+			);
 		}
 
 		set_transient( self::TRANSIENT_LATEST, $data, 6 * HOUR_IN_SECONDS );

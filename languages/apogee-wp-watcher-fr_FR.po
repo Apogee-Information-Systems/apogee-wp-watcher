@@ -1,0 +1,366 @@
+# Apogee Watcher for WordPress — fr_FR
+# Copyright (C) 2026 Apogee Information Systems
+# This file is distributed under the same license as the Apogee Watcher for WordPress package.
+# Apogee Information Systems <info@apogee.gr>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Apogee Watcher for WordPress 0.2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/Apogee-Information-Systems/apogee-wp-watcher/issues\n"
+"POT-Creation-Date: 2026-11-15 16:53+0100\n"
+"PO-Revision-Date: 2026-11-15 15:54+0000\n"
+"Last-Translator: Apogee Information Systems <info@apogee.gr>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: includes/class-watcher-admin-notices.php:84
+msgid "Apogee Watcher:"
+msgstr "Apogee Watcher :"
+
+#: includes/class-watcher-admin-notices.php:89
+#, php-format
+msgid "%1$d open alert (%2$s · %3$s)."
+msgid_plural "%1$d open alerts (e.g. %2$s · %3$s)."
+msgstr[0] "%1$d alerte ouverte (%2$s · %3$s)."
+msgstr[1] "%1$d alertes ouvertes (p. ex. %2$s · %3$s)."
+
+#: includes/class-watcher-admin-notices.php:100
+msgid "Results"
+msgstr "Résultats"
+
+#: includes/class-watcher-admin-notices.php:102
+msgid "Investigate in Watcher"
+msgstr "Examiner dans Watcher"
+
+#: includes/class-watcher-api-client.php:156
+msgid "No Watcher site is linked."
+msgstr "Aucun site Watcher n’est lié."
+
+#: includes/class-watcher-api-client.php:216
+msgid "Missing refresh token. Reconnect to Watcher."
+msgstr "Jeton d’actualisation manquant. Reconnectez-vous à Watcher."
+
+#: includes/class-watcher-api-client.php:231
+msgid "Could not refresh the Watcher token."
+msgstr "Impossible d’actualiser le jeton Watcher."
+
+#: includes/class-watcher-api-client.php:262
+msgid "Not connected to Watcher."
+msgstr "Non connecté à Watcher."
+
+#: includes/class-watcher-api-client.php:311
+#, php-format
+msgid "Watcher API error (HTTP %d)."
+msgstr "Erreur API Watcher (HTTP %d)."
+
+#: includes/class-watcher-updater.php:114
+msgid "Apogee Watcher for WordPress"
+msgstr "Apogee Watcher pour WordPress"
+
+#: includes/class-watcher-dashboard-widget.php:62
+msgid "Connect this site to Apogee Watcher to see Core Web Vitals here."
+msgstr ""
+"Connectez ce site à Apogee Watcher pour afficher ici les Core Web"
+"Vitals."
+
+#: includes/class-watcher-dashboard-widget.php:64
+msgid "Connect"
+msgstr "Connecter"
+
+#: includes/class-watcher-dashboard-widget.php:100
+msgid "Performance"
+msgstr "Performance"
+
+#: includes/class-watcher-dashboard-widget.php:116
+msgid "Last test:"
+msgstr "Dernier test :"
+
+#: includes/class-watcher-dashboard-widget.php:121
+msgid "No completed tests yet for this site."
+msgstr "Aucun test terminé pour ce site pour le moment."
+
+#: includes/class-watcher-dashboard-widget.php:127
+msgid "Attention-free:"
+msgstr "Sans attention :"
+
+#: includes/class-watcher-dashboard-widget.php:140
+#, php-format
+msgid "%d open alert"
+msgid_plural "%d open alerts"
+msgstr[0] "%d alerte ouverte"
+msgstr[1] "%d alertes ouvertes"
+
+#: includes/class-watcher-results-page.php:64
+msgid "Test results"
+msgstr "Résultats des tests"
+
+#: includes/class-watcher-dashboard-widget.php:152
+msgid "View in Watcher"
+msgstr "Voir dans Watcher"
+
+#: includes/class-watcher-oauth.php:53
+msgid "Already connected. Disconnect first to pair again."
+msgstr "Déjà connecté. Déconnectez d’abord pour apparier à nouveau."
+
+#: includes/class-watcher-oauth.php:67
+msgid "Watcher returned an invalid verification URL."
+msgstr "Watcher a renvoyé une URL de vérification non valide."
+
+#: includes/class-watcher-oauth.php:104
+msgid "No pairing in progress. Start Connect again."
+msgstr "Aucun appariement en cours. Relancez Connecter."
+
+#: includes/class-watcher-oauth.php:129 includes/class-watcher-settings.php:100
+msgid "Waiting for approval in Watcher…"
+msgstr "En attente d’approbation dans Watcher…"
+
+#: includes/class-watcher-oauth.php:144
+msgid "Unexpected token response."
+msgstr "Réponse de jeton inattendue."
+
+#: includes/class-watcher-oauth.php:164
+msgid "Connected to Apogee Watcher."
+msgstr "Connecté à Apogee Watcher."
+
+#: includes/class-watcher-oauth.php:181
+msgid "Disconnected from Watcher."
+msgstr "Déconnecté de Watcher."
+
+#: includes/class-watcher-oauth.php:191
+msgid "Forbidden."
+msgstr "Interdit."
+
+#: includes/class-watcher-plugin.php:82
+msgid "Settings"
+msgstr "Réglages"
+
+#: includes/class-watcher-results-page.php:69
+msgid "Connect to Watcher to load test results."
+msgstr "Connectez-vous à Watcher pour charger les résultats."
+
+#: includes/class-watcher-results-page.php:71
+msgid "Open Connection"
+msgstr "Ouvrir la connexion"
+
+#: includes/class-watcher-results-page.php:101
+msgid "Pages"
+msgstr "Pages"
+
+#: includes/class-watcher-results-page.php:106
+msgid "Alerts"
+msgstr "Alertes"
+
+#: includes/class-watcher-results-page.php:111
+msgid ""
+"Lab times are in seconds (Watcher units). Page titles open the page in "
+"Watcher; timestamps open that test result. Alerts show the latest 20 for "
+"this site."
+msgstr ""
+"Les temps de labo sont en secondes (unités Watcher). Les titres de"
+"page ouvrent la page dans Watcher ; les horodatages ouvrent le"
+"résultat de test correspondant. Les alertes affichent les 20 plus"
+"récentes pour ce site."
+
+#: includes/class-watcher-results-page.php:122
+msgid "Could not load pages."
+msgstr "Impossible de charger les pages."
+
+#: includes/class-watcher-results-page.php:128
+msgid ""
+"No monitored pages yet. Add pages in the Watcher dashboard, then return here."
+msgstr ""
+"Aucune page suivie pour le moment. Ajoutez des pages dans le tableau"
+"de bord Watcher, puis revenez ici."
+
+#: includes/class-watcher-results-page.php:132
+msgid "Open Watcher"
+msgstr "Ouvrir Watcher"
+
+#: includes/class-watcher-results-page.php:141
+msgid "Page"
+msgstr "Page"
+
+#: includes/class-watcher-results-page.php:142
+msgid "Tested"
+msgstr "Testé"
+
+#: includes/class-watcher-results-page.php:143
+msgid "Mobile"
+msgstr "Mobile"
+
+#: includes/class-watcher-results-page.php:144
+msgid "Desktop"
+msgstr "Ordinateur"
+
+#: includes/class-watcher-results-page.php:145
+msgid "LCP (m)"
+msgstr "LCP (m)"
+
+#: includes/class-watcher-results-page.php:146
+msgid "INP (m)"
+msgstr "INP (m)"
+
+#: includes/class-watcher-results-page.php:147
+msgid "CLS (m)"
+msgstr "CLS (m)"
+
+#: includes/class-watcher-results-page.php:184
+msgid "Next page"
+msgstr "Page suivante"
+
+#: includes/class-watcher-results-page.php:205
+msgid "No alerts for this site yet."
+msgstr "Aucune alerte pour ce site pour le moment."
+
+#: includes/class-watcher-results-page.php:213
+msgid "When"
+msgstr "Quand"
+
+#: includes/class-watcher-results-page.php:214
+msgid "Metric"
+msgstr "Métrique"
+
+#: includes/class-watcher-results-page.php:215
+msgid "Strategy"
+msgstr "Stratégie"
+
+#: includes/class-watcher-results-page.php:216
+msgid "Actual"
+msgstr "Valeur"
+
+#: includes/class-watcher-results-page.php:217
+msgid "Status"
+msgstr "État"
+
+#: includes/class-watcher-results-page.php:236
+msgid "Resolved"
+msgstr "Résolue"
+
+#: includes/class-watcher-results-page.php:237
+msgid "Open"
+msgstr "Ouverte"
+
+#: includes/class-watcher-results-page.php:265
+msgid "View all alerts in Watcher"
+msgstr "Voir toutes les alertes dans Watcher"
+
+#: includes/class-watcher-results-page.php:368
+msgid "Untitled page"
+msgstr "Page sans titre"
+
+#: includes/class-watcher-settings.php:48
+msgid "Watcher"
+msgstr "Watcher"
+
+#: includes/class-watcher-settings.php:138
+msgid "Connection"
+msgstr "Connexion"
+
+#: includes/class-watcher-settings.php:99
+msgid "Starting pairing…"
+msgstr "Démarrage de l’appariement…"
+
+#: includes/class-watcher-settings.php:101
+msgid "Connected."
+msgstr "Connecté."
+
+#: includes/class-watcher-settings.php:102
+msgid "Disconnecting…"
+msgstr "Déconnexion…"
+
+#: includes/class-watcher-settings.php:103
+msgid "Something went wrong."
+msgstr "Une erreur s’est produite."
+
+#: includes/class-watcher-settings.php:104
+msgid "Disconnect this site from Apogee Watcher?"
+msgstr "Déconnecter ce site d’Apogee Watcher ?"
+
+#: includes/class-watcher-settings.php:131
+msgid ""
+"Monitor this site’s Core Web Vitals with Apogee Watcher. No Google PageSpeed "
+"API key required in WordPress."
+msgstr ""
+"Surveillez les Core Web Vitals de ce site avec Apogee Watcher. Aucune"
+"clé API Google PageSpeed n’est requise dans WordPress."
+
+#: includes/class-watcher-settings.php:142
+msgid "Connected"
+msgstr "Connecté"
+
+#: includes/class-watcher-settings.php:152
+msgid "Open Watcher dashboard"
+msgstr "Ouvrir le tableau de bord Watcher"
+
+#: includes/class-watcher-settings.php:155
+msgid "Disconnect"
+msgstr "Déconnecter"
+
+#: includes/class-watcher-settings.php:160
+msgid "Not connected."
+msgstr "Non connecté."
+
+#: includes/class-watcher-settings.php:165
+msgid ""
+"Connect opens Apogee Watcher so you can create a free account (using your "
+"WordPress admin email) or sign in, then approve this site."
+msgstr ""
+"Connecter ouvre Apogee Watcher pour créer un compte gratuit (avec"
+"l’e-mail d’administration WordPress) ou vous connecter, puis approuver"
+"ce site."
+
+#: includes/class-watcher-settings.php:172
+msgid "Connect to Watcher"
+msgstr "Connecter à Watcher"
+
+#: includes/class-watcher-settings.php:175
+msgid "Create free account on Watcher"
+msgstr "Créer un compte gratuit sur Watcher"
+
+#: includes/class-watcher-settings.php:180
+msgid "Pairing code:"
+msgstr "Code d’appariement :"
+
+#: includes/class-watcher-settings.php:185
+msgid "Open Watcher to approve"
+msgstr "Ouvrir Watcher pour approuver"
+
+#: includes/class-watcher-settings.php:196
+msgid "About this service"
+msgstr "À propos de ce service"
+
+#: includes/class-watcher-settings.php:202
+#, php-format
+msgid ""
+"This plugin connects to %s. When you click Connect, the site URL and your "
+"admin email (as a suggested account address) are sent to Watcher so you can "
+"approve pairing. Tokens are stored in WordPress options. See Watcher’s terms "
+"and privacy on the Watcher site."
+msgstr ""
+"Cette extension se connecte à %s. Lorsque vous cliquez sur Connecter,"
+"l’URL du site et votre e-mail d’administration (comme adresse de"
+"compte suggérée) sont envoyés à Watcher pour approuver l’appariement."
+"Les jetons sont stockés dans les options WordPress. Consultez les"
+"conditions et la confidentialité sur le site Watcher."
+
+#: includes/class-watcher-updater.php:103
+msgid ""
+"Connect your WordPress site to Apogee Watcher. See Core Web Vitals and "
+"Lighthouse scores in the dashboard without a Google PageSpeed API key in "
+"WordPress."
+msgstr ""
+"Connectez votre site WordPress à Apogee Watcher. Consultez les Core"
+"Web Vitals et les scores Lighthouse dans le tableau de bord sans clé"
+"API Google PageSpeed dans WordPress."
+
+#: includes/class-watcher-updater.php:139
+msgid "Update check recently failed."
+msgstr "La vérification des mises à jour a récemment échoué."
+
+#: includes/class-watcher-updater.php:166
+msgid "Invalid update response."
+msgstr "Réponse de mise à jour non valide."
