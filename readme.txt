@@ -4,7 +4,7 @@ Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ All testing runs on Watcher's infrastructure using Google PageSpeed Insights. Th
 
 = External service =
 
-This plugin connects to Apogee Watcher (`https://apogeewatcher.com`) operated by Apogee Information Systems. When you click **Connect to Watcher**, the plugin sends your site URL and (as a suggested signup address) your WordPress admin email to Watcher so you can approve pairing. OAuth access and refresh tokens are stored in WordPress options. See [Apogee Watcher](https://apogeewatcher.com) for terms and privacy.
+This plugin connects to Apogee Watcher (`https://apogeewatcher.com`) operated by Apogee Information Systems. When you click **Connect to Watcher**, the plugin sends your site URL and (as a suggested signup address) your WordPress admin email to Watcher so you can approve pairing. OAuth access and refresh tokens are stored in WordPress options. The plugin also checks Apogee Watcher for newer plugin versions (self-hosted updates; no WordPress.org listing required). See [Apogee Watcher](https://apogeewatcher.com) for terms and privacy.
 
 == Installation ==
 
@@ -53,6 +53,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Changelog ==
 
+= 0.1.4 =
+* Self-hosted updates via Update URI (dashboard updates from apogeewatcher.com without WordPress.org).
+
 = 0.1.3 =
 * Test results table shows page titles (link to the page in Watcher) and last-tested timestamps (link to the result).
 
@@ -66,6 +69,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 * Initial public release: device OAuth connect, dashboard widget, test results page, and alert notices.
 
 == Upgrade Notice ==
+
+= 0.1.4 =
+Adds self-hosted dashboard updates from Apogee Watcher.
 
 = 0.1.3 =
 Test results now include page titles and tested timestamps with Watcher deep links.

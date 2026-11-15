@@ -52,6 +52,9 @@ class Apogee_Watcher_Plugin {
 		$this->connection = new Apogee_Watcher_Connection();
 		$this->api        = new Apogee_Watcher_Api_Client( $this->connection );
 
+		// Outside is_admin(): cron / background update checks must see this filter.
+		( new Apogee_Watcher_Updater() )->hooks();
+
 		if ( is_admin() ) {
 			( new Apogee_Watcher_Settings( $this->connection, $this->api ) )->hooks();
 			( new Apogee_Watcher_Dashboard_Widget( $this->connection, $this->api ) )->hooks();
@@ -104,5 +107,7 @@ class Apogee_Watcher_Plugin {
 		delete_transient( 'apogee_wp_watcher_alerts' );
 		delete_transient( 'apogee_wp_watcher_pages' );
 		delete_transient( 'apogee_wp_watcher_device_pending' );
+		delete_transient( Apogee_Watcher_Updater::TRANSIENT_LATEST );
+		delete_transient( Apogee_Watcher_Updater::TRANSIENT_FAIL );
 	}
 }
