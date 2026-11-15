@@ -64,16 +64,19 @@ class Apogee_Watcher_Updater {
 			return $update;
 		}
 
-		return array(
-			'id'            => 'https://apogeewatcher.com/tools/wordpress',
-			'slug'          => 'apogee-wp-watcher',
-			'version'       => $remote_version,
-			'url'           => ! empty( $remote['url'] ) ? (string) $remote['url'] : 'https://apogeewatcher.com/tools/wordpress',
-			'package'       => $package,
-			'tested'        => isset( $remote['tested'] ) ? (string) $remote['tested'] : '',
-			'requires_php'  => isset( $remote['requires_php'] ) ? (string) $remote['requires_php'] : '',
-			'requires'      => isset( $remote['requires'] ) ? (string) $remote['requires'] : '',
+		$payload = array(
+			'id'           => 'https://apogeewatcher.com/tools/wordpress',
+			'slug'         => 'apogee-wp-watcher',
+			'version'      => $remote_version,
+			'url'          => ! empty( $remote['url'] ) ? (string) $remote['url'] : 'https://apogeewatcher.com/tools/wordpress',
+			'package'      => $package,
+			'tested'       => isset( $remote['tested'] ) ? (string) $remote['tested'] : '',
+			'requires_php' => isset( $remote['requires_php'] ) ? (string) $remote['requires_php'] : '',
+			'requires'     => isset( $remote['requires'] ) ? (string) $remote['requires'] : '',
+			'icons'        => $this->normalize_icons( isset( $remote['icons'] ) ? $remote['icons'] : null ),
 		);
+
+		return $payload;
 	}
 
 	/**
@@ -121,7 +124,39 @@ class Apogee_Watcher_Updater {
 			'tested'        => isset( $remote['tested'] ) ? (string) $remote['tested'] : '',
 			'download_link' => isset( $remote['package'] ) ? (string) $remote['package'] : '',
 			'sections'      => $sections,
+			'icons'         => $this->normalize_icons( isset( $remote['icons'] ) ? $remote['icons'] : null ),
 		);
+	}
+
+	/**
+	 * WordPress expects https icon URLs keyed 1x / 2x (optional svg).
+	 *
+	 * @param mixed $icons Remote icons payload.
+	 * @return array<string, string>
+	 */
+	private function normalize_icons( $icons ): array {
+		$defaults = array(
+			'1x' => APOGEE_WP_WATCHER_API_BASE . '/images/wordpress-plugin/icon-128.png',
+			'2x' => APOGEE_WP_WATCHER_API_BASE . '/images/wordpress-plugin/icon-256.png',
+		);
+
+		if ( ! is_array( $icons ) ) {
+			return $defaults;
+		}
+
+		$out = array();
+		foreach ( array( '1x', '2x', 'svg' ) as $key ) {
+			if ( empty( $icons[ $key ] ) || ! is_string( $icons[ $key ] ) ) {
+				continue;
+			}
+			$url = esc_url_raw( $icons[ $key ] );
+			if ( $url === '' || 0 !== strpos( $url, 'https://' ) ) {
+				continue;
+			}
+			$out[ $key ] = $url;
+		}
+
+		return $out !== array() ? $out : $defaults;
 	}
 
 	/**

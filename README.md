@@ -2,7 +2,7 @@
 
 Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core Web Vitals and Lighthouse monitoring in wp-admin, without a Google PageSpeed API key in WordPress.
 
-**Display name:** Apogee Watcher for WordPress · **Slug:** `apogee-wp-watcher` · **Version:** 0.2.0 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher)
+**Display name:** Apogee Watcher for WordPress · **Slug:** `apogee-wp-watcher` · **Version:** 0.2.1 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher)
 
 ## Features (v0.2)
 
@@ -13,6 +13,7 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core 
 - Admin notice when Watcher reports open alerts
 - Self-hosted updates via `Update URI` (dashboard updates from apogeewatcher.com; no WordPress.org listing required)
 - **Translations:** Greek (`el`), French (`fr_FR`), German (`de_DE`), plus a full `.pot` catalogue under `languages/`
+- **Update-screen icons** (128 / 256) from apogeewatcher.com
 - Disconnect / revoke refresh token
 
 ## Requirements
