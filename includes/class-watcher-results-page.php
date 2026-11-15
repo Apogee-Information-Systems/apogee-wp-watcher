@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin: Test results (pages + latest mobile/desktop).
+ * Admin: Test results (pages + latest mobile/desktop) and recent alerts.
  *
  * @package ApogeeWatcher
  */
@@ -60,7 +60,7 @@ class Apogee_Watcher_Results_Page {
 			return;
 		}
 
-		echo '<div class="wrap apogee-wp-watcher-wrap">';
+		echo '<div class="wrap apogee-wp-watcher-wrap apogee-wp-watcher-wrap--wide">';
 		echo '<h1>' . esc_html__( 'Test results', 'apogee-wp-watcher' ) . '</h1>';
 
 		if ( ! $this->connection->is_connected() ) {
@@ -83,9 +83,43 @@ class Apogee_Watcher_Results_Page {
 			}
 		}
 
+		$alerts = get_transient( 'apogee_wp_watcher_alerts_recent' );
+		if ( false === $alerts ) {
+			// Last 20 by id (open and resolved) — separate cache from open-only admin notices.
+			$alerts = $this->api->get_alerts( 20, false );
+			if ( ! is_wp_error( $alerts ) ) {
+				set_transient( 'apogee_wp_watcher_alerts_recent', $alerts, 10 * MINUTE_IN_SECONDS );
+			}
+		}
+
 		if ( is_wp_error( $pages ) ) {
 			printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( $pages->get_error_message() ) );
-			echo '</div>';
+		}
+
+		echo '<div class="apogee-wp-watcher-results-grid">';
+		echo '<div class="apogee-wp-watcher-results-col apogee-wp-watcher-results-col--pages">';
+		echo '<h2 class="apogee-wp-watcher-results-heading">' . esc_html__( 'Pages', 'apogee-wp-watcher' ) . '</h2>';
+		$this->render_pages_panel( is_wp_error( $pages ) ? null : $pages );
+		echo '</div>';
+
+		echo '<div class="apogee-wp-watcher-results-col apogee-wp-watcher-results-col--alerts">';
+		echo '<h2 class="apogee-wp-watcher-results-heading">' . esc_html__( 'Alerts', 'apogee-wp-watcher' ) . '</h2>';
+		$this->render_alerts_panel( $alerts );
+		echo '</div>';
+		echo '</div>';
+
+		echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; timestamps open that test result. Alerts show the latest 20 for this site.', 'apogee-wp-watcher' ) . '</p>';
+		echo '</div>';
+	}
+
+	/**
+	 * Left column: monitored pages table.
+	 *
+	 * @param array<string,mixed>|null $pages Pages API payload.
+	 */
+	private function render_pages_panel( ?array $pages ): void {
+		if ( null === $pages ) {
+			echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Could not load pages.', 'apogee-wp-watcher' ) . '</p>';
 			return;
 		}
 
@@ -97,7 +131,6 @@ class Apogee_Watcher_Results_Page {
 				esc_url( $this->connection->site_admin_url() ),
 				esc_html__( 'Open Watcher', 'apogee-wp-watcher' )
 			);
-			echo '</div>';
 			return;
 		}
 
@@ -151,9 +184,100 @@ class Apogee_Watcher_Results_Page {
 				esc_html__( 'Next page', 'apogee-wp-watcher' )
 			);
 		}
+	}
 
-		echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; timestamps open that test result.', 'apogee-wp-watcher' ) . '</p>';
-		echo '</div>';
+	/**
+	 * Right column: recent alerts table.
+	 *
+	 * @param array<string,mixed>|\WP_Error $alerts Alerts API payload or error.
+	 */
+	private function render_alerts_panel( $alerts ): void {
+		if ( is_wp_error( $alerts ) ) {
+			printf(
+				'<p class="apogee-wp-watcher-muted">%s</p>',
+				esc_html( $alerts->get_error_message() )
+			);
+			return;
+		}
+
+		$rows = isset( $alerts['data'] ) && is_array( $alerts['data'] ) ? $alerts['data'] : array();
+		if ( ! $rows ) {
+			echo '<p class="apogee-wp-watcher-muted">' . esc_html__( 'No alerts for this site yet.', 'apogee-wp-watcher' ) . '</p>';
+			return;
+		}
+
+		echo '<table class="widefat striped apogee-wp-watcher-table apogee-wp-watcher-alerts-table">';
+		echo '<thead><tr>';
+		foreach (
+			array(
+				__( 'When', 'apogee-wp-watcher' ),
+				__( 'Metric', 'apogee-wp-watcher' ),
+				__( 'Strategy', 'apogee-wp-watcher' ),
+				__( 'Actual', 'apogee-wp-watcher' ),
+				__( 'Status', 'apogee-wp-watcher' ),
+			) as $h
+		) {
+			printf( '<th>%s</th>', esc_html( $h ) );
+		}
+		echo '</tr></thead><tbody>';
+
+		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$when     = ! empty( $row['created_at'] ) ? $this->format_tested_at( (string) $row['created_at'] ) : '—';
+			$metric   = isset( $row['metric_name'] ) ? (string) $row['metric_name'] : '—';
+			$strategy = isset( $row['strategy'] ) ? (string) $row['strategy'] : '—';
+			$actual   = array_key_exists( 'actual_value', $row ) && null !== $row['actual_value']
+				? (string) $row['actual_value']
+				: '—';
+			$resolved = ! empty( $row['resolved'] );
+			$status   = $resolved
+				? __( 'Resolved', 'apogee-wp-watcher' )
+				: __( 'Open', 'apogee-wp-watcher' );
+			$href     = $this->alert_watcher_url( $row );
+
+			echo '<tr>';
+			if ( $href ) {
+				printf(
+					'<td><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></td>',
+					esc_url( $href ),
+					esc_html( $when )
+				);
+			} else {
+				printf( '<td>%s</td>', esc_html( $when ) );
+			}
+			printf( '<td>%s</td>', esc_html( $metric ) );
+			printf( '<td>%s</td>', esc_html( $strategy ) );
+			printf( '<td>%s</td>', esc_html( $actual ) );
+			printf(
+				'<td><span class="apogee-wp-watcher-alert-status %s">%s</span></td>',
+				$resolved ? 'is-resolved' : 'is-open',
+				esc_html( $status )
+			);
+			echo '</tr>';
+		}
+		echo '</tbody></table>';
+
+		printf(
+			'<p class="apogee-wp-watcher-muted"><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
+			esc_url( $this->connection->api_base() . '/admin/watcher-alerts' ),
+			esc_html__( 'View all alerts in Watcher', 'apogee-wp-watcher' )
+		);
+	}
+
+	/**
+	 * Deep link to an alert in Watcher admin.
+	 *
+	 * @param array<string,mixed> $row Alert row.
+	 */
+	private function alert_watcher_url( array $row ): string {
+		$alert_id = isset( $row['id'] ) ? (string) $row['id'] : '';
+		if ( $alert_id === '' ) {
+			return '';
+		}
+
+		return $this->connection->api_base() . '/admin/watcher-alerts/' . rawurlencode( $alert_id );
 	}
 
 	/**

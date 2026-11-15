@@ -146,14 +146,21 @@ class Apogee_Watcher_Api_Client {
 	/**
 	 * GET /api/v1/sites/{id}/alerts
 	 *
+	 * @param int  $limit    Page size (1–100).
+	 * @param bool $open_only When true, only unresolved alerts.
 	 * @return array<string, mixed>|\WP_Error
 	 */
-	public function get_alerts() {
+	public function get_alerts( int $limit = 20, bool $open_only = true ) {
 		$site_id = (string) $this->connection->get( 'site_id', '' );
 		if ( $site_id === '' ) {
 			return new WP_Error( 'apogee_wp_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-wp-watcher' ) );
 		}
-		return $this->authenticated_get( '/api/v1/sites/' . rawurlencode( $site_id ) . '/alerts?open=1&limit=20' );
+		$query = array(
+			'limit' => max( 1, min( 100, $limit ) ),
+			'open'  => $open_only ? 1 : 0,
+		);
+		$path = '/api/v1/sites/' . rawurlencode( $site_id ) . '/alerts?' . http_build_query( $query );
+		return $this->authenticated_get( $path );
 	}
 
 	/**

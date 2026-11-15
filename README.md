@@ -9,7 +9,7 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com) — Co
 - **Connect to Watcher** via OAuth 2.0 device authorisation (`apogee-watcher-wordpress` client)
 - Free-account path on Watcher using the WordPress admin email as a suggested address
 - Dashboard widget (latest score + LCP / INP / CLS)
-- **Watcher → Test results** table (page titles → Watcher page, timestamps → result, mobile/desktop scores)
+- **Watcher → Test results** two-column view (pages + scores; latest 20 alerts)
 - Admin notice when Watcher reports open alerts
 - Self-hosted updates via `Update URI` (dashboard updates from apogeewatcher.com; no WordPress.org listing required)
 - Disconnect / revoke refresh token

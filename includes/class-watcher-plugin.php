@@ -105,6 +105,7 @@ class Apogee_Watcher_Plugin {
 	public static function deactivate(): void {
 		delete_transient( 'apogee_wp_watcher_overview' );
 		delete_transient( 'apogee_wp_watcher_alerts' );
+		delete_transient( 'apogee_wp_watcher_alerts_recent' );
 		delete_transient( 'apogee_wp_watcher_pages' );
 		delete_transient( 'apogee_wp_watcher_device_pending' );
 		delete_transient( Apogee_Watcher_Updater::TRANSIENT_LATEST );
