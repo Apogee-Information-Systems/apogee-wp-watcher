@@ -92,9 +92,12 @@ class Apogee_Watcher_Settings {
 		);
 
 		if ( false !== strpos( $hook, 'apogee-watcher' ) ) {
+			$script = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
+				? 'assets/js/admin.js'
+				: 'assets/js/admin.min.js';
 			wp_enqueue_script(
 				'apogee-watcher-admin',
-				APOGEE_WATCHER_URL . 'assets/js/admin.js',
+				APOGEE_WATCHER_URL . $script,
 				array(),
 				APOGEE_WATCHER_VERSION,
 				true

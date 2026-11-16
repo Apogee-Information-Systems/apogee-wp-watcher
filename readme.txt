@@ -2,9 +2,9 @@
 Contributors: apogeeinformationsystems
 Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
-Tested up to: 7.1.4
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.1
+Stable tag: 0.3.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,11 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 
 == Changelog ==
 
+= 0.3.2 =
+* readme: Tested up to uses major.minor only (7.1) for Plugin Check.
+* Sanitize Tracked pages bulk `pages` input at the point of reading $_POST.
+* Ship minified admin.js (admin.min.js); load unminified when SCRIPT_DEBUG is on.
+
 = 0.3.1 =
 * Rename plugin to Apogee Watcher: Automated PageSpeed Monitoring.
 * Plugin slug / folder / text domain: apogee-watcher (was apogee-wp-watcher); migrates connection options from the old keys.
@@ -60,7 +65,7 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 * Clear alert-dismiss user meta on uninstall; accessibility labels on Tracked pages and pairing link.
 * Sanitize Tracked pages bulk JSON input; load textdomain only for self-hosted (Update URI) builds.
 * Distribution ZIP excludes repo files (.gitignore, CONTRIBUTING.md); optional --wporg build strips Update URI.
-* Tested up to WordPress 7.1.4; License GPL-2.0-or-later in readme.
+* Tested up to WordPress 7.1; License GPL-2.0-or-later in readme.
 
 = 0.3.0 =
 * Connection screen: Tracked pages table with bulk include / pause scheduled tests.

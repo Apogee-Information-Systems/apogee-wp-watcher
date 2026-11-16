@@ -2,24 +2,23 @@
 
 Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core Web Vitals and Lighthouse monitoring in wp-admin, without a Google PageSpeed API key in WordPress.
 
-**Display name:** Apogee Watcher: Automated PageSpeed Monitoring · **Slug:** `apogee-watcher` · **Version:** 0.3.1 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher) (GitHub repo name unchanged)
+**Display name:** Apogee Watcher: Automated PageSpeed Monitoring · **Slug:** `apogee-watcher` · **Version:** 0.3.2 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher) 
 
 ## Features (v0.3)
 
 - **Connect to Watcher** via OAuth 2.0 device authorisation (`apogee-watcher-wordpress` client)
-- Free-account path on Watcher using the WordPress admin email as a suggested address
+- Free-account access to Watcher using the WordPress admin email as a suggested address
 - Dashboard widget (latest score + LCP / INP / CLS)
 - **Watcher → Test results** two-column view (pages + scores; latest 20 alerts)
 - Admin notice when Watcher reports open alerts
 - Self-hosted updates via `Update URI` (dashboard updates from apogeewatcher.com; no WordPress.org listing required)
 - **Translations:** Greek (`el`), French (`fr_FR`), German (`de_DE`), plus a full `.pot` catalogue under `languages/`
 - **Tracked pages** on Connection: bulk include / pause scheduled tests in Watcher
-- **Update-screen icons** (128 / 256) from apogeewatcher.com
 - Disconnect / revoke refresh token
 
 ## Requirements
 
-- WordPress 5.8+ (tested up to 7.1.4)
+- WordPress 5.8+ (tested up to 7.1)
 - PHP 7.4+
 - Outbound HTTPS to `https://apogeewatcher.com` only (API base is fixed in the plugin)
 
@@ -42,7 +41,7 @@ Build a clean package (excludes `.git`, `.gitignore`, `CONTRIBUTING.md`, `bin/`,
 ```bash
 ./bin/build-release-zip.sh              # self-hosted (keeps Update URI)
 ./bin/build-release-zip.sh --wporg      # WordPress.org candidate (strips Update URI)
-# → dist/apogee-watcher-0.3.1[.zip|-wporg.zip] + SHA256 on stdout
+# → dist/apogee-watcher-0.3.2[.zip|-wporg.zip] + SHA256 on stdout
 ```
 
 ## Watcher API

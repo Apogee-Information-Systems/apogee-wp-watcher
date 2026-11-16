@@ -166,13 +166,11 @@ class Apogee_Watcher_Tracked_Pages {
 			wp_send_json_error( array( 'message' => __( 'Choose a bulk action.', 'apogee-watcher' ) ), 400 );
 		}
 
-		$raw = isset( $_POST['pages'] ) ? wp_unslash( $_POST['pages'] ) : '';
-		if ( is_string( $raw ) ) {
-			$decoded = json_decode( sanitize_textarea_field( $raw ), true );
-		} elseif ( is_array( $raw ) ) {
-			$decoded = map_deep( $raw, 'sanitize_text_field' );
-		} else {
-			$decoded = null;
+		$decoded = null;
+		if ( isset( $_POST['pages'] ) && is_string( $_POST['pages'] ) ) {
+			$decoded = json_decode( sanitize_textarea_field( wp_unslash( $_POST['pages'] ) ), true );
+		} elseif ( isset( $_POST['pages'] ) && is_array( $_POST['pages'] ) ) {
+			$decoded = map_deep( wp_unslash( $_POST['pages'] ), 'sanitize_text_field' );
 		}
 		if ( ! is_array( $decoded ) || $decoded === array() ) {
 			wp_send_json_error( array( 'message' => __( 'Select at least one page.', 'apogee-watcher' ) ), 400 );
