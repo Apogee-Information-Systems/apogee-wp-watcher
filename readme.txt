@@ -56,6 +56,7 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 = 0.3.3 =
 * Admin notice uses overview open_alerts (same total as the dashboard widget) and shows only on the Dashboard.
 * Test results: alerts table Page column (Watcher admin title + live URL); Pages table URLs open the live page.
+* Verified / tested up to WordPress 7.1.4 (readme Tested up to stays 7.1 for Plugin Check).
 
 = 0.3.2 =
 * readme: Tested up to uses major.minor only (7.1) for Plugin Check.

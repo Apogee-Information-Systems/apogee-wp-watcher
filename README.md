@@ -18,7 +18,7 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core 
 
 ## Requirements
 
-- WordPress 5.8+ (tested up to 7.1)
+- WordPress 5.8+ (readme Tested up to 7.1; verified on 7.1.4)
 - PHP 7.4+
 - Outbound HTTPS to `https://apogeewatcher.com` only (API base is fixed in the plugin)
 
