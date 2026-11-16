@@ -4,7 +4,7 @@ Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.2
+Stable tag: 0.3.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ Yes. New users can create a Free Apogee Watcher account during Connect (subject 
 No. It is monitoring-only. Use your usual caching/optimization plugins alongside Watcher.
 
 == Changelog ==
+
+= 0.3.3 =
+* Admin notice uses overview open_alerts (same total as the dashboard widget) and shows only on the Dashboard.
+* Test results: alerts table Page column (Watcher admin title + live URL); Pages table URLs open the live page.
 
 = 0.3.2 =
 * readme: Tested up to uses major.minor only (7.1) for Plugin Check.

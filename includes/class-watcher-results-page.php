@@ -108,7 +108,7 @@ class Apogee_Watcher_Results_Page {
 		echo '</div>';
 		echo '</div>';
 
-		echo '<p class="apogee-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; timestamps open that test result. Alerts show the latest 20 for this site.', 'apogee-watcher' ) . '</p>';
+		echo '<p class="apogee-watcher-muted">' . esc_html__( 'Lab times are in seconds (Watcher units). Page titles open the page in Watcher; the URL opens the live page. Timestamps open that test result. Alerts show the latest 20 for this site.', 'apogee-watcher' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -211,6 +211,7 @@ class Apogee_Watcher_Results_Page {
 		foreach (
 			array(
 				__( 'When', 'apogee-watcher' ),
+				__( 'Page', 'apogee-watcher' ),
 				__( 'Metric', 'apogee-watcher' ),
 				__( 'Strategy', 'apogee-watcher' ),
 				__( 'Actual', 'apogee-watcher' ),
@@ -236,6 +237,7 @@ class Apogee_Watcher_Results_Page {
 				? __( 'Resolved', 'apogee-watcher' )
 				: __( 'Open', 'apogee-watcher' );
 			$href     = $this->alert_watcher_url( $row );
+			$page_row = $this->alert_page_row( $row );
 
 			echo '<tr>';
 			if ( $href ) {
@@ -247,6 +249,7 @@ class Apogee_Watcher_Results_Page {
 			} else {
 				printf( '<td>%s</td>', esc_html( $when ) );
 			}
+			echo '<td>' . $this->page_cell( $page_row ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside helper.
 			printf( '<td>%s</td>', esc_html( $metric ) );
 			printf( '<td>%s</td>', esc_html( $strategy ) );
 			printf( '<td>%s</td>', esc_html( $actual ) );
@@ -281,9 +284,26 @@ class Apogee_Watcher_Results_Page {
 	}
 
 	/**
-	 * Page title linking to Watcher page view, with URL as secondary text.
+	 * Normalise alert page fields into the shape expected by page_cell().
 	 *
-	 * @param array<string,mixed> $row Page row from API.
+	 * @param array<string,mixed> $row Alert row from API.
+	 * @return array<string,mixed>
+	 */
+	private function alert_page_row( array $row ): array {
+		$page = isset( $row['page'] ) && is_array( $row['page'] ) ? $row['page'] : array();
+		if ( $page === array() && ! empty( $row['page_id'] ) ) {
+			$page = array(
+				'id' => (string) $row['page_id'],
+			);
+		}
+
+		return $page;
+	}
+
+	/**
+	 * Page title linking to Watcher admin; public URL below opens the live page.
+	 *
+	 * @param array<string,mixed> $row Page row from API (or alert.page).
 	 */
 	private function page_cell( array $row ): string {
 		$title    = $this->page_title( $row );
@@ -301,7 +321,8 @@ class Apogee_Watcher_Results_Page {
 		$secondary = '';
 		if ( $url !== '' && $url !== $title ) {
 			$secondary = sprintf(
-				'<div class="apogee-watcher-muted"><code>%s</code></div>',
+				'<div class="apogee-watcher-muted"><a class="apogee-watcher-page-url" href="%s" target="_blank" rel="noopener noreferrer"><code>%s</code></a></div>',
+				esc_url( $url ),
 				esc_html( $url )
 			);
 		}

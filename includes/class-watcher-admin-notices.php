@@ -41,9 +41,17 @@ class Apogee_Watcher_Admin_Notices {
 
 	/**
 	 * Show a compact notice when open alerts exist.
+	 *
+	 * Count comes from site overview (same open_alerts as the dashboard widget),
+	 * not from counting a paginated /alerts page.
 	 */
 	public function render(): void {
 		if ( ! current_user_can( 'manage_options' ) || ! $this->connection->is_connected() ) {
+			return;
+		}
+
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'dashboard' !== $screen->id ) {
 			return;
 		}
 
@@ -51,32 +59,37 @@ class Apogee_Watcher_Admin_Notices {
 			return;
 		}
 
-		$alerts = get_transient( 'apogee_watcher_alerts' );
-		if ( false === $alerts ) {
-			$alerts = $this->api->get_alerts();
-			if ( ! is_wp_error( $alerts ) ) {
-				set_transient( 'apogee_watcher_alerts', $alerts, 15 * MINUTE_IN_SECONDS );
+		$overview = get_transient( 'apogee_watcher_overview' );
+		if ( false === $overview ) {
+			$overview = $this->api->get_overview();
+			if ( ! is_wp_error( $overview ) ) {
+				set_transient( 'apogee_watcher_overview', $overview, 10 * MINUTE_IN_SECONDS );
 			}
 		}
 
-		if ( is_wp_error( $alerts ) ) {
+		if ( is_wp_error( $overview ) ) {
 			return;
 		}
 
-		$data  = isset( $alerts['data'] ) && is_array( $alerts['data'] ) ? $alerts['data'] : array();
-		$count = count( $data );
+		$count = isset( $overview['open_alerts'] ) ? (int) $overview['open_alerts'] : 0;
 		if ( $count < 1 ) {
 			return;
 		}
 
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( $screen && false !== strpos( (string) $screen->id, 'apogee-watcher' ) ) {
-			// Still show on plugin pages — useful context.
+		$metric   = 'metric';
+		$strategy = '';
+		$alerts   = get_transient( 'apogee_watcher_alerts' );
+		if ( false === $alerts ) {
+			$alerts = $this->api->get_alerts( 1 );
+			if ( ! is_wp_error( $alerts ) ) {
+				set_transient( 'apogee_watcher_alerts', $alerts, 15 * MINUTE_IN_SECONDS );
+			}
 		}
-
-		$first = $data[0];
-		$metric = isset( $first['metric_name'] ) ? (string) $first['metric_name'] : 'metric';
-		$strategy = isset( $first['strategy'] ) ? (string) $first['strategy'] : '';
+		if ( ! is_wp_error( $alerts ) && isset( $alerts['data'][0] ) && is_array( $alerts['data'][0] ) ) {
+			$first    = $alerts['data'][0];
+			$metric   = isset( $first['metric_name'] ) ? (string) $first['metric_name'] : 'metric';
+			$strategy = isset( $first['strategy'] ) ? (string) $first['strategy'] : '';
+		}
 
 		printf(
 			'<div class="notice notice-warning is-dismissible apogee-watcher-notice" data-dismiss-nonce="%s"><p><strong>%s</strong> %s <a href="%s">%s</a> · <a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p></div>',

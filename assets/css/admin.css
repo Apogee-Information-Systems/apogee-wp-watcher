@@ -79,6 +79,19 @@
 	font-size: 12px;
 }
 
+.apogee-watcher-page-cell .apogee-watcher-page-url {
+	color: #6b6b6b;
+	font-weight: 400;
+	text-decoration: none;
+	word-break: break-all;
+}
+
+.apogee-watcher-page-cell .apogee-watcher-page-url:hover,
+.apogee-watcher-page-cell .apogee-watcher-page-url:focus {
+	color: #ff6633;
+	text-decoration: underline;
+}
+
 .apogee-watcher-user-code {
 	font-size: 1.25rem;
 	letter-spacing: 0.2em;
