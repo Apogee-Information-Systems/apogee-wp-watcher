@@ -240,4 +240,37 @@
 			});
 		});
 	}
+
+	document.querySelectorAll('.apogee-watcher-run-test').forEach(function (btn) {
+		btn.addEventListener('click', function () {
+			var pageId = btn.getAttribute('data-page-id') || '';
+			if (!pageId) {
+				setTrackedFlash(apogeeWpWatcher.i18n.error, false);
+				return;
+			}
+			btn.disabled = true;
+			setTrackedFlash(apogeeWpWatcher.i18n.runTestWorking || '…', true);
+			var body = new FormData();
+			body.append('action', 'apogee_watcher_run_test');
+			body.append('nonce', apogeeWpWatcher.nonce);
+			body.append('page_id', pageId);
+			fetch(apogeeWpWatcher.ajaxUrl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: body
+			}).then(function (r) {
+				return r.json();
+			}).then(function (json) {
+				btn.disabled = false;
+				if (json && json.success) {
+					setTrackedFlash((json.data && json.data.message) || apogeeWpWatcher.i18n.connected, true);
+					return;
+				}
+				setTrackedFlash((json && json.data && json.data.message) || apogeeWpWatcher.i18n.error, false);
+			}).catch(function () {
+				btn.disabled = false;
+				setTrackedFlash(apogeeWpWatcher.i18n.error, false);
+			});
+		});
+	});
 })();

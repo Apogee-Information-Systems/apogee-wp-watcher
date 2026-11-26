@@ -36,6 +36,7 @@ class Apogee_Watcher_Tracked_Pages {
 	 */
 	public function hooks(): void {
 		add_action( 'wp_ajax_apogee_watcher_pages_bulk', array( $this, 'ajax_bulk' ) );
+		add_action( 'wp_ajax_apogee_watcher_run_test', array( $this, 'ajax_run_test' ) );
 	}
 
 	/**
@@ -46,18 +47,33 @@ class Apogee_Watcher_Tracked_Pages {
 			return;
 		}
 
-		$rows = $this->build_rows();
+		$rows   = $this->build_rows();
+		$quota  = $this->quota_hint();
 		?>
 		<div class="apogee-watcher-card" id="apogee-watcher-tracked-pages">
 			<h2><?php echo esc_html__( 'Tracked pages', 'apogee-watcher' ); ?></h2>
 			<p class="apogee-watcher-muted">
 				<?php
 				echo esc_html__(
-					'Published WordPress pages and posts. Include adds the URL to Watcher (or resumes scheduling). Pause scheduling leaves the page in Watcher but stops scheduled tests.',
+					'Published WordPress pages and posts. Include adds the URL to Watcher (or resumes scheduling). Pause scheduling leaves the page in Watcher but stops scheduled tests. Run test queues an on-demand check under your Watcher quota and API share.',
 					'apogee-watcher'
 				);
 				?>
 			</p>
+			<?php if ( is_array( $quota ) ) : ?>
+				<p class="apogee-watcher-muted" id="apogee-watcher-quota-hint">
+					<?php
+					echo esc_html(
+						sprintf(
+							/* translators: 1: tests remaining, 2: API share remaining */
+							__( 'Tests remaining this period: %1$s. API/plugin share remaining: %2$s.', 'apogee-watcher' ),
+							isset( $quota['tests_remaining'] ) ? (string) $quota['tests_remaining'] : '—',
+							isset( $quota['api_share_remaining'] ) ? (string) $quota['api_share_remaining'] : '—'
+						)
+					);
+					?>
+				</p>
+			<?php endif; ?>
 
 			<?php if ( is_wp_error( $rows ) ) : ?>
 				<?php
@@ -107,6 +123,7 @@ class Apogee_Watcher_Tracked_Pages {
 								<th><?php echo esc_html__( 'Title', 'apogee-watcher' ); ?></th>
 								<th><?php echo esc_html__( 'URL', 'apogee-watcher' ); ?></th>
 								<th><?php echo esc_html__( 'In Watcher', 'apogee-watcher' ); ?></th>
+								<th><?php echo esc_html__( 'On demand', 'apogee-watcher' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -137,6 +154,19 @@ class Apogee_Watcher_Tracked_Pages {
 											<span class="apogee-watcher-track is-off"><?php echo esc_html__( 'Not tracked', 'apogee-watcher' ); ?></span>
 										<?php endif; ?>
 									</td>
+									<td>
+										<?php if ( ! empty( $row['page_id'] ) && $row['tracked'] ) : ?>
+											<button
+												type="button"
+												class="button button-small apogee-watcher-run-test"
+												data-page-id="<?php echo esc_attr( (string) $row['page_id'] ); ?>"
+											>
+												<?php echo esc_html__( 'Run test', 'apogee-watcher' ); ?>
+											</button>
+										<?php else : ?>
+											<span class="apogee-watcher-muted">—</span>
+										<?php endif; ?>
+									</td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
@@ -146,6 +176,52 @@ class Apogee_Watcher_Tracked_Pages {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Queue an on-demand PSI run for a tracked Watcher page.
+	 */
+	public function ajax_run_test(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Forbidden.', 'apogee-watcher' ) ), 403 );
+		}
+		check_ajax_referer( 'apogee_watcher_admin', 'nonce' );
+
+		if ( ! $this->connection->is_connected() ) {
+			wp_send_json_error( array( 'message' => __( 'Not connected to Watcher.', 'apogee-watcher' ) ), 400 );
+		}
+
+		$page_id = isset( $_POST['page_id'] ) ? absint( wp_unslash( $_POST['page_id'] ) ) : 0;
+		if ( $page_id < 1 ) {
+			wp_send_json_error( array( 'message' => __( 'Missing Watcher page id.', 'apogee-watcher' ) ), 400 );
+		}
+
+		$result = $this->api->enqueue_test_job( $page_id, array( 'mobile', 'desktop' ) );
+		if ( is_wp_error( $result ) ) {
+			$status = (int) ( $result->get_error_data()['status'] ?? 400 );
+			$msg    = $result->get_error_message();
+			if ( 403 === $status ) {
+				$msg = __( 'Watcher denied test enqueue. Disconnect and Connect again to grant test access.', 'apogee-watcher' );
+			} elseif ( 429 === $status ) {
+				$msg = __( 'Watcher test quota or API share is exhausted for this period.', 'apogee-watcher' );
+			}
+			wp_send_json_error( array( 'message' => $msg ), $status > 0 ? $status : 400 );
+		}
+
+		$job_id = isset( $result['job_id'] ) ? (int) $result['job_id'] : 0;
+		$share  = isset( $result['share'] ) && is_array( $result['share'] ) ? $result['share'] : array();
+
+		wp_send_json_success(
+			array(
+				'message' => sprintf(
+					/* translators: %d: job id */
+					__( 'Test queued (job %d). Results appear in Watcher when PageSpeed finishes.', 'apogee-watcher' ),
+					$job_id
+				),
+				'job_id'  => $job_id,
+				'share'   => $share,
+			)
+		);
 	}
 
 	/**
@@ -240,7 +316,22 @@ class Apogee_Watcher_Tracked_Pages {
 	}
 
 	/**
-	 * @return list<array{external_id: string, title: string, url: string, type: string, tracked: bool, active: bool}>|\WP_Error
+	 * Quota hint from Watcher overview (best-effort).
+	 *
+	 * @return array<string, mixed>|null
+	 */
+	private function quota_hint(): ?array {
+		$overview = $this->api->get_overview();
+		if ( is_wp_error( $overview ) || ! is_array( $overview ) ) {
+			return null;
+		}
+		$quota = $overview['quota'] ?? null;
+
+		return is_array( $quota ) ? $quota : null;
+	}
+
+	/**
+	 * @return list<array{external_id: string, title: string, url: string, type: string, tracked: bool, active: bool, page_id: ?string}>|\WP_Error
 	 */
 	private function build_rows() {
 		$watcher = $this->fetch_all_watcher_pages();
@@ -290,6 +381,7 @@ class Apogee_Watcher_Tracked_Pages {
 				'type'        => $post->post_type,
 				'tracked'     => is_array( $match ),
 				'active'      => is_array( $match ) && ! empty( $match['active'] ),
+				'page_id'     => ( is_array( $match ) && ! empty( $match['id'] ) ) ? (string) $match['id'] : null,
 			);
 		}
 

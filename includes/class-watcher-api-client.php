@@ -39,7 +39,7 @@ class Apogee_Watcher_Api_Client {
 			'client_id'        => self::CLIENT_ID,
 			'site_url'         => $this->connection->site_url_for_pairing(),
 			'plugin_version'   => APOGEE_WATCHER_VERSION,
-			'scope'            => 'site:read site:alerts:read site:pages:write',
+			'scope'            => 'site:read site:alerts:read site:pages:write site:tests:enqueue',
 			'suggested_email'  => $email,
 		);
 
@@ -192,6 +192,55 @@ class Apogee_Watcher_Api_Client {
 				'Idempotency-Key' => $key,
 			)
 		);
+	}
+
+	/**
+	 * POST /api/v1/sites/{id}/test-jobs
+	 *
+	 * @param int                  $page_id    Watcher page id.
+	 * @param list<string>         $strategies mobile and/or desktop.
+	 * @return array<string, mixed>|\WP_Error
+	 */
+	public function enqueue_test_job( int $page_id, array $strategies = array( 'mobile', 'desktop' ) ) {
+		$site_id = (string) $this->connection->get( 'site_id', '' );
+		if ( $site_id === '' ) {
+			return new WP_Error( 'apogee_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-watcher' ) );
+		}
+
+		$path = '/api/v1/sites/' . rawurlencode( $site_id ) . '/test-jobs';
+
+		// Merge new default scopes (e.g. site:tests:enqueue) after plugin upgrade.
+		$rotated = $this->refresh_access_token();
+		if ( is_wp_error( $rotated ) ) {
+			return $rotated;
+		}
+
+		return $this->authenticated_request(
+			'POST',
+			$path,
+			array(
+				'page_id'    => $page_id,
+				'strategies' => array_values( $strategies ),
+				'reason'     => 'manual',
+			)
+		);
+	}
+
+	/**
+	 * GET /api/v1/sites/{id}/test-jobs/{job}
+	 *
+	 * @param int $job_id Job id from enqueue.
+	 * @return array<string, mixed>|\WP_Error
+	 */
+	public function get_test_job( int $job_id ) {
+		$site_id = (string) $this->connection->get( 'site_id', '' );
+		if ( $site_id === '' ) {
+			return new WP_Error( 'apogee_watcher_no_site', __( 'No Watcher site is linked.', 'apogee-watcher' ) );
+		}
+
+		$path = '/api/v1/sites/' . rawurlencode( $site_id ) . '/test-jobs/' . rawurlencode( (string) $job_id );
+
+		return $this->authenticated_get( $path );
 	}
 
 	/**

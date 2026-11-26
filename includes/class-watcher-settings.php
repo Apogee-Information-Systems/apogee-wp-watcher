@@ -118,6 +118,7 @@ class Apogee_Watcher_Settings {
 						'confirmDisc'  => __( 'Disconnect this site from Apogee Watcher?', 'apogee-watcher' ),
 						'bulkNeed'     => __( 'Select at least one page and a bulk action.', 'apogee-watcher' ),
 						'bulkWorking'  => __( 'Updating Watcher…', 'apogee-watcher' ),
+						'runTestWorking' => __( 'Queueing test in Watcher…', 'apogee-watcher' ),
 					),
 				)
 			);

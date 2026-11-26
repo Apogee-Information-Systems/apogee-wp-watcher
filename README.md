@@ -2,7 +2,7 @@
 
 Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core Web Vitals and Lighthouse monitoring in wp-admin, without a Google PageSpeed API key in WordPress.
 
-**Display name:** Apogee Watcher: Automated PageSpeed Monitoring · **Slug:** `apogee-watcher` · **Version:** 0.3.3 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher) 
+**Display name:** Apogee Watcher: Automated PageSpeed Monitoring · **Slug:** `apogee-watcher` · **Version:** 0.3.4 · **Repository:** [Apogee-Information-Systems/apogee-wp-watcher](https://github.com/Apogee-Information-Systems/apogee-wp-watcher) 
 
 ## Features (v0.3)
 
@@ -13,7 +13,7 @@ Official WordPress plugin for [Apogee Watcher](https://apogeewatcher.com): Core 
 - Admin notice when Watcher reports open alerts
 - Self-hosted updates via `Update URI` (dashboard updates from apogeewatcher.com; no WordPress.org listing required)
 - **Translations:** Greek (`el`), French (`fr_FR`), German (`de_DE`), plus a full `.pot` catalogue under `languages/`
-- **Tracked pages** on Connection: bulk include / pause scheduled tests in Watcher
+- **Tracked pages** on Connection: bulk include / pause scheduled tests in Watcher; **Run test** for on-demand checks (uses Watcher quota and API share)
 - Disconnect / revoke refresh token
 
 ## Requirements
@@ -41,7 +41,7 @@ Build a clean package (excludes `.git`, `.gitignore`, `CONTRIBUTING.md`, `bin/`,
 ```bash
 ./bin/build-release-zip.sh              # self-hosted (keeps Update URI)
 ./bin/build-release-zip.sh --wporg      # WordPress.org candidate (strips Update URI)
-# → dist/apogee-watcher-0.3.2[.zip|-wporg.zip] + SHA256 on stdout
+# → dist/apogee-watcher-0.3.4[.zip|-wporg.zip] + SHA256 on stdout
 ```
 
 ## Watcher API
@@ -57,6 +57,9 @@ Uses the site-scoped REST API documented in the Watcher wiki plan `wordpress_int
 | `GET /api/v1/sites/{id}/overview` | Widget |
 | `GET /api/v1/sites/{id}/pages` | Results table |
 | `GET /api/v1/sites/{id}/alerts` | Admin notices + results alerts column |
+| `POST /api/v1/sites/{id}/test-jobs` | Run test (enqueue) |
+| `GET /api/v1/sites/{id}/test-jobs/{job}` | Poll enqueue status |
+| `POST /api/v1/sites/{id}/pages/batch` | Tracked pages include / pause |
 
 Public (unauthenticated) update endpoints used by `Update URI`:
 

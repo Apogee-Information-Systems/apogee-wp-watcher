@@ -4,7 +4,7 @@ Tags: pagespeed, core web vitals, performance, lighthouse, monitoring
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.3
+Stable tag: 0.3.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,11 @@ Yes. New users can create a Free Apogee Watcher account during Connect (subject 
 No. It is monitoring-only. Use your usual caching/optimization plugins alongside Watcher.
 
 == Changelog ==
+
+= 0.3.4 =
+* Tracked pages: **Run test** queues an on-demand Watcher check (mobile + desktop) under your plan quota and API share.
+* Device pairing requests the `site:tests:enqueue` scope (reconnect after upgrade if Run test is denied).
+* API client: enqueue and poll `POST/GET …/test-jobs`.
 
 = 0.3.3 =
 * Admin notice uses overview open_alerts (same total as the dashboard widget) and shows only on the Dashboard.
@@ -101,6 +106,9 @@ No. It is monitoring-only. Use your usual caching/optimization plugins alongside
 * Initial public release: device OAuth connect, dashboard widget, test results page, and alert notices.
 
 == Upgrade Notice ==
+
+= 0.3.4 =
+Adds Run test on Tracked pages. After update, Disconnect and Connect again so Watcher can grant test enqueue access.
 
 = 0.3.1 =
 Slug is now apogee-watcher. Deactivate the old plugin, install this ZIP, activate (connection migrates), then delete the old apogee-wp-watcher folder.
